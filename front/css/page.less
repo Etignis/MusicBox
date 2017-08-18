@@ -1,0 +1,29 @@
+.ButtonPlace{
+	.flexParent();
+}
+.btn{	
+	.flexChild();
+	border: none;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+	outline: none;	
+	
+	transition: color .2s, border .2s, background .2s;
+	
+	&:hover{
+		color: @color;
+	}
+	
+	&:active{
+	}
+	
+}
+
+input:focus, 
+.btn:focus{
+	box-shadow: 0 0 3px 3px fade(@color, 30%);
+	//background: fade(@color, 20%);
+
+}

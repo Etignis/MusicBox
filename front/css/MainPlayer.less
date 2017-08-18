@@ -1,0 +1,64 @@
+.PlayerPanel{
+	background: fade(@white,100%);
+	.PlayerTimePanel{
+		width: 100%;
+		margin-bottom: 0.9rem;
+		.flexParent();
+	}
+	.TimeLineWrapper{
+		.flexChild();	
+	}
+	.TimeLineWrapper,
+	.TimeWrapper {
+		padding: 0 .1rem;
+	}
+	
+	.PlayerRulePanel{
+		width: 100%;
+		.flexParent();
+		align-items: center;
+	}
+	.VolumeWrapper{
+		.flexParent();
+		.fa{
+			font-size: 110%;
+			margin: .3rem;
+			margin-top: 4%;
+    		display: block;
+		}
+		.rangeWrapper{
+			margin: .3rem;
+		}
+	}
+	
+	.fa{
+		margin-top: 1%;
+	}
+	
+	#PlayerPlayPauseButton,
+	#PlayerNextTrackButton{
+		padding: 1rem;
+		font-size: 230%;
+		color: @l-gray;
+		
+		&:hover{
+			color: @color;
+			border-color: @color;
+		}
+	}
+	#PlayerPlayPauseButton{
+		color: darken(@l-gray, 10%);
+		padding: 1rem 1.15rem 1rem 1.5rem ;
+		margin: .1rem;
+		font-size: 230%;
+		border: 1px solid @l-gray;
+		border-radius: 50%;
+	}
+	#PlayerNextTrackButton{
+		padding: 0.8rem;
+		padding: 1rem 1.1rem 1rem 1.45rem ;
+		border-radius: 10% 10%;
+		margin: 0.3rem;
+		font-size: 230%;
+	}
+}
