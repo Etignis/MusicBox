@@ -27,53 +27,70 @@
 </head>
 
 <body>
- <div id='wrapper'>
+ <div id='app'>
  
   <!-- PlayLists -->
   
-  <div class='PlayLists'>
+  <playlists>
+    <playlist-group
+      v-for="arrItem in arr"
+      v-bind:key="arrItem.id"
+      v-bind:title="arrItem.title">
+      <playlist-tag 
+        v-for="tagItem in arrItem.tags"
+        v-bind:key="tagItem.id"
+        v-bind:title="tagItem.title">
+        <playlist-source-option 
+          v-for="srcItem in tagItem.src"
+          v-bind:key="srcItem.id"
+          v-bind:title="srcItem.title">
+        </playlist-source-option>
+      </playlist-tag>
+    </playlist-group>
+  </playlists>
+
+  <!-- <div class='PlayLists'> -->
 	
-    <!-- Emotions -->
+    <!-- Emotions --> 
     
-    <div class='PlayListGroup Emotions'>  
-      <div class='PlayListGroupTitle'>
-        <div class='title'>
-          Настоение
-        </div>
-      </div>
+    <!-- <div class='PlayListGroup Emotions'>   -->
+      <!-- <div class='PlayListGroupTitle'> -->
+        <!-- <div class='title'> -->
+          <!-- Настоение -->
+        <!-- </div> -->
+      <!-- </div> -->
     
-      <div class='flexContent' id='PlayListGroupEmotions'>
-        <playlist-tag title='Фон'></playlist-tag>
-        <playlist-tag title='Экшн'></playlist-tag>
-        <playlist-tag title='Погоня'></playlist-tag>
+      <!-- <div class='flexContent' id='PlayListGroupEmotions'> -->
+        <!-- <playlist-tag title='Фон'></playlist-tag> -->
+        <!-- <playlist-tag title='Экшн'></playlist-tag> -->
+        <!-- <playlist-tag title='Погоня'></playlist-tag> -->
         
         
           
-      </div> 
-    </div>
+      <!-- </div>  -->
+    <!-- </div> -->
     
-    <!-- Places -->
+    <!-- Places --> 
     
-    <div class='PlayListGroup Places'>  
-      <div class='PlayListGroupTitle'>
-        <div class='title'>
-          Места
-        </div>
-      </div>
-      <div class='flexContent' id='PlayListGroupPlaces'>
-        <playlist-tag title='Космос' show_buttons='false'></playlist-tag>
-        <playlist-tag title='Везде' show_buttons='false'></playlist-tag>
-        <playlist-tag title='Бар' show_buttons='false'></playlist-tag>
-        <playlist-tag title='Заброшка' show_buttons='false'></playlist-tag>
+    <!-- <div class='PlayListGroup Places'>   -->
+      <!-- <div class='PlayListGroupTitle'> -->
+        <!-- <div class='title'> -->
+          <!-- Места -->
+        <!-- </div> -->
+      <!-- </div> -->
+      <!-- <div class='flexContent' id='PlayListGroupPlaces'> -->
+        <!-- <playlist-tag title='Космос' show_buttons='false'></playlist-tag> -->
+        <!-- <playlist-tag title='Везде' show_buttons='false'></playlist-tag> -->
+        <!-- <playlist-tag title='Бар' show_buttons='false'></playlist-tag> -->
+        <!-- <playlist-tag title='Заброшка' show_buttons='false'></playlist-tag> -->
         
     
-     </div>
+     <!-- </div> -->
       
-    </div>
+    <!-- </div> -->
   
-  </div>
-    <!-- <i class="fa fa-random" aria-hidden="true"></i> -->
-  <!-- <i class="fa fa-thumb-tack" aria-hidden="true"></i> -->
+  <!-- </div> -->
+
   
  <!-- player & settings -->
  <div class='BottomPanel'> 

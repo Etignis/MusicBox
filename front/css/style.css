@@ -212,7 +212,7 @@ img {
   transition: color .2s, border .2s, background .2s;
 }
 .btn:hover {
-  color: #7986CB;
+  background: rgba(255, 255, 255, 0.4);
 }
 input:focus,
 .btn:focus {
@@ -245,6 +245,7 @@ input:focus,
   padding-top: .8rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 5px;
+  flex-grow: 1;
 }
 .PlayListGroup .PlayListGroupTitle {
   font-size: 120%;
@@ -270,6 +271,8 @@ input:focus,
 .PlayListGroup .PlayListTag {
   flex-grow: 1;
   flex: 0 0 150px;
+}
+.PlayListGroup .PlayListTag .inner {
   background: rgba(255, 255, 255, 0.3);
   padding: .3rem;
   margin: .1rem;
@@ -279,11 +282,11 @@ input:focus,
   transition: background 0.2s, border 0.2s, transform 0.2s, box-shadow 0.2s 0.05s;
   border: 0.2rem solid rgba(255, 255, 255, 0);
 }
-.PlayListGroup .PlayListTag:hover {
+.PlayListGroup .PlayListTag:hover .inner {
   transform: scale(1.05);
   box-shadow: 0 5px 3px 2px rgba(0, 0, 0, 0.02), 0 0px 0px 5px rgba(121, 134, 203, 0.02);
 }
-.PlayListGroup .PlayListTag.active {
+.PlayListGroup .PlayListTag.active .inner {
   border-color: rgba(121, 134, 203, 0.6);
 }
 .PlayListGroup .PlayListTag .title {
@@ -305,6 +308,19 @@ input:focus,
 .PlayListGroup .PlayListTag .btn {
   flex-basis: 20%;
   padding: .2rem;
+}
+.PlayListGroup .PlayListTag .btn.active {
+  color: #7986CB;
+}
+.PlayListGroup .PlayListTag .settings {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  padding: .1rem;
+}
+.PlayListGroup .PlayListTag .s-title {
+  font-weight: bold;
+  font-size: 110%;
+  padding: .1rem;
 }
 .BottomPanel {
   position: absolute;

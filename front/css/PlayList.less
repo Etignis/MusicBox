@@ -34,6 +34,8 @@
 	
 	border: 1px solid fade(@white, 50%);
 	border-radius: 5px;
+	
+	flex-grow: 1;
 		
 	.PlayListGroupTitle{
 		font-size: 120%;
@@ -60,27 +62,33 @@
 	.PlayListTag{
 		.flexChild();
 		flex: 0 0 150px;
-		background: fade(@white, 30%);
-		padding: .3rem;
-		margin: .1rem;
-		position: relative;
-		cursor: pointer;
-		border-radius: 3px;
 		
-		transition: background .2s, border .2s, transform .2s, box-shadow .2s .05s;
+		.inner{
+			background: fade(@white, 30%);
+			padding: .3rem;
+			margin: .1rem;
+			position: relative;
+			cursor: pointer;
+			border-radius: 3px;	
+			transition: background .2s, border .2s, transform .2s, box-shadow .2s .05s;	
+			border: .2rem solid fade(@white, 0%);
+		}
 		
-		border: .2rem solid fade(@white, 0%);
 		
 		&:hover{
 			//background: fade(@white, 50%);
 		//	border: 2px solid fade(@color, 30%);
 			//border-color: fade(@color, 60%);
-			transform: scale(1.05);
-			box-shadow: 0 5px 3px 2px fade(@black, 2%),  0 0px 0px 5px fade(@color, 2%);
+			.inner{
+				transform: scale(1.05);
+				box-shadow: 0 5px 3px 2px fade(@black, 2%),  0 0px 0px 5px fade(@color, 2%);
+			}
 		}
 		&.active{
 			//ackground: @color;//lighten(@color, 20%);
-			border-color: fade(@color, 60%);
+			.inner{
+				border-color: fade(@color, 60%);
+			}
 			&:hover{
 				//background: lighten(@color, 10%);
 				//border: 2px solid fade(@color, 80%);
@@ -105,6 +113,21 @@
 		.btn{
 			flex-basis: 20%;
 			padding: .2rem;
+			
+			&.active{
+				color: @color;
+			}
+		}
+		
+		.settings{
+			position: absolute;
+			background: fade(@white, 50%);
+			padding: .1rem;
+		}
+		.s-title{
+			font-weight: bold;
+			font-size: 110%;
+			padding: .1rem;
 		}
 	}
 }
