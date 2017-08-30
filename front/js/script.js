@@ -1,5 +1,43 @@
 $(document).ready(function(){
   
+  Vue.component('range', {
+    props: {
+      value: {
+        type: String,
+        default: '0'
+      },/**/
+      grad: {
+        type: String,
+        default: "linear-gradient(to right, #transparent 0%, #transparent 0%, #fff 0.1%, #fff 100%)"
+      },/**/
+      percent: {
+        type: Number
+      },
+      color: {
+        type: String,
+        default: "#7986CB"
+      },
+      bgcolor: {
+        type: String,
+        default: "#eee"
+      }
+    },
+    methods: {
+      restyle: function(oEvent) {
+        var nPercent = oEvent.currentTarget.value;
+        this.value = nPercent;
+        this.percent = nPercent;
+        this.grad = "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
+      }
+    },
+    computed: {
+      grad0: function(){
+        return "linear-gradient(to right, #transparent 0%, #transparent "+this.percent+"%, #fff "+this.percent+".1%, #fff 100%)";
+      }
+    },
+    template: "<input type='range' v-bind:value='value' v-bind:style='{ background: grad}' @mousemove='restyle' @mousedown='restyle'>"
+  });
+  
   Vue.component('playlist-source-option', {
     props: {
       title: {
@@ -29,8 +67,13 @@ $(document).ready(function(){
         default: false
       },
       sources: {
-        type: Array,
-        default: []
+        type: Array
+      },
+      selectedval: {
+        type: String
+      },
+      val: {
+        type: String
       }
     },
     methods: {
@@ -43,11 +86,17 @@ $(document).ready(function(){
       toggleSettings: function(oEvent) {
         	this.show_settings = !this.show_settings;
       },
-      toggleActive: function(oEvent) {
-        this.isActive = !this.isActive;
+      toggleActive: function(val) {
+        /*debugger;
+        this.isActive= !this.isActive;
+        if(this.isActive) {
+          this.selected = this.val;
+        } 
+        */
+        this.selectedval = val;
       }
     },
-    template: "<div class='PlayListTag' v-bind:class='{ active: isActive }' v-on:click='toggleActive'>\
+    template: "<div class='PlayListTag'>\
           <div class='inner'>\
             <div class='title'>{{title}}</div>\
             <div v-if='show_buttons === true' class='buttons'>\

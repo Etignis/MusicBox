@@ -21,6 +21,8 @@
 @track-radius: 0;//5px;
 @contrast: 5%;
 
+@bg-grad: @color; //transparent; //linear-gradient(to right, @color 0%, @color 50%, fade(@color, 0%) 50.1%, fade(@color, 0%) 100%);;
+
 .shadow(@shadow-size,@shadow-blur,@shadow-color) {
   box-shadow: @shadow-size @shadow-size @shadow-blur @shadow-color, 0px 0px @shadow-size lighten(@shadow-color,5%);
 }
@@ -70,7 +72,8 @@ input[type=range] {
   &::-webkit-slider-runnable-track {
     .track();
     //.shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
-    background: @track-color;
+    //background: @track-color;
+   // background: @bg-grad;
     border-radius: @track-radius;
     border: none;// @track-border-width solid @track-border-color;
   }
@@ -83,13 +86,15 @@ input[type=range] {
   }
 
   &:focus::-webkit-slider-runnable-track {
-    background: lighten(@track-color, @contrast);
+    //background: lighten(@track-color, @contrast);
+    //background: @bg-grad;
   }
 
   &::-moz-range-track {
     .track();
     .shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
-    background: @track-color;
+    //background: @track-color;
+    background: @bg-grad;
     border-radius: @track-radius;
     border: none;// @track-border-width solid @track-border-color;
   }
@@ -99,20 +104,23 @@ input[type=range] {
 
   &::-ms-track {
     .track(); 
-    background: transparent;
+    //background: transparent;
+    background: @bg-grad;
     border-color: transparent;
     border-width: @thumb-width 0;
     color: transparent;
   }
 
   &::-ms-fill-lower {
-    background: darken(@track-color, @contrast);
+    //background: darken(@track-color, @contrast);
+    background: @bg-grad;
     border: @track-border-width solid @track-border-color;
     border-radius: @track-radius*2;
     .shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
   }
   &::-ms-fill-upper {
-    background: @track-color;
+    //background: @track-color;
+    background: @bg-grad;
     border: @track-border-width solid @track-border-color;
     border-radius: @track-radius*2;
     //.shadow(@track-shadow-size,@track-shadow-blur,@track-shadow-color);
@@ -121,9 +129,11 @@ input[type=range] {
     .thumb();
   }
   &:focus::-ms-fill-lower {
-    background: @track-color;
+    //background: @track-color;
+    //background: @bg-grad;
   }
   &:focus::-ms-fill-upper {
-    background: lighten(@track-color, @contrast);
+    //background: lighten(@track-color, @contrast);
+    //background: @bg-grad;
   }
 }

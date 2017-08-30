@@ -37,9 +37,11 @@
       v-bind:key="arrItem.id"
       v-bind:title="arrItem.title">
       <playlist-tag 
-        v-for="tagItem in arrItem.tags"
+        v-for="(tagItem, val) in arrItem.tags"
         v-bind:key="tagItem.id"
-        v-bind:title="tagItem.title">
+        v-bind:title="tagItem.title"
+        v-bind:class='{ active: selectedval === tagItem }'
+        v-on:click='toggleActive(tagItem)'>
         <playlist-source-option 
           v-for="srcItem in tagItem.src"
           v-bind:key="srcItem.id"
@@ -101,7 +103,8 @@
     <div class='PlayerTimePanel'>
       <!-- Timeline -->
       <div class='TimeLineWrapper'>
-        <input type='range'>
+        <!-- <input type='range'> -->
+        <range></range>
       </div>
     </div>
     
@@ -110,7 +113,7 @@
       <div class='VolumeWrapper'>
         <i class="fa fa-volume-down" aria-hidden="true"></i>
         <div class='rangeWrapper'>
-          <input type='range'>
+          <range value='50'></range>
         </div>
         <i class="fa fa-volume-up" aria-hidden="true"></i>
       </div>
