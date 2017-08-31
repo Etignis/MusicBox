@@ -1,48 +1,5 @@
 $(document).ready(function(){
 
-  // var componentSettings = {
-  //   props: {
-  //     value: {
-  //       type: String,
-  //       default: '0'
-  //     },/*/
-  //     grad: {
-  //       type: String,
-  //       default: "linear-gradient(to right, #transparent 0%, #transparent 0%, #fff 0.1%, #fff 100%)"
-  //     },/**/
-  //     percent: {
-  //       type: Number
-  //     },
-  //     color: {
-  //       type: String,
-  //       default: "#7986CB"
-  //     },
-  //     bgcolor: {
-  //       type: String,
-  //       default: "#eee"
-  //     }
-  //   },
-  //   methods: {
-  //     restyle: function(oEvent) {
-  //       var nPercent = oEvent.currentTarget.value;
-  //       this.value = nPercent;
-  //       this.percent = nPercent;
-  //       this.grad = "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
-  //     }
-  //   },
-  //   computed: {
-  //     grad0: function(){
-  //       return "linear-gradient(to right, #transparent 0%, #transparent "+this.percent+"%, #fff "+this.percent+".1%, #fff 100%)";
-  //     }
-  //   },
-  //   template: "<input type='range' v-bind:value='value' v-bind:style='{ background: grad}' @mousemove='restyle' @mousedown='restyle'>"
-  // };
-
-  // componentSettings.grad = {
-  //       type: String,
-  //       default: `linear-gradient(to right, #transparent 0%, #transparent ${componentSettings.value.default}%, #fff 0.1%, #fff 100%)`
-  //     }
-
   Vue.component('range', {
     props: {
       value: {
@@ -69,7 +26,7 @@ $(document).ready(function(){
       restyle: function(oEvent) {
         var nPercent = oEvent? oEvent.currentTarget.value : this.value;
         this.value = nPercent;
-        this.percent = nPercent;
+        //this.percent = nPercent;
         this.grad = "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
       }
     },
@@ -83,6 +40,7 @@ $(document).ready(function(){
     },
     template: "<input type='range' v-bind:value='value' v-bind:style='{ background: grad}' @mousemove='restyle' @mousedown='restyle'>"
   });
+
 
   Vue.component('playlist-source-option', {
     props: {
@@ -254,18 +212,22 @@ $(document).ready(function(){
             {
               id: "21",
               title: "Везде",
+              showButtons: false,
               src: [
                 {
                   title: "src1",
                   id: "211"
-                },
+                }
+              ]
+            },
+            {
+              id: "22",
+              title: "Заброшка",
+              showButtons: false,
+              src: [
                 {
-                  title: "src2",
-                  id: "212"
-                },
-                {
-                  title: "src3",
-                  id: "213"
+                  title: "src1",
+                  id: "221"
                 }
               ]
             }
