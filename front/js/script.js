@@ -91,6 +91,7 @@ $(document).ready(function(){
         	this.show_settings = !this.show_settings;
       },
       toggleActive: function(val) {
+        alert("Active!");
         /*debugger;
         this.isActive= !this.isActive;
         if(this.isActive) {
@@ -138,6 +139,8 @@ $(document).ready(function(){
     },
     methods: {
       selectTag: function(oEvent) {
+
+        alert("Click!");
         console.log("click tag")
       }
     },
