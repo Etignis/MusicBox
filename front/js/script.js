@@ -58,6 +58,9 @@ $(document).ready(function(){
         type: String,
         default: "заголовок"
       },
+      id: {
+        type: String
+      },
       show_buttons: {
       	type: Boolean,
         default: true
@@ -80,6 +83,11 @@ $(document).ready(function(){
         type: String
       }
     },
+    computed: {
+      bShowSettings: function() {
+        return this.show_settings
+      }
+    },
     methods: {
     	random: function(oEvent) {
       	alert('random');
@@ -92,17 +100,11 @@ $(document).ready(function(){
       },
       toggleActive: function(val) {
         alert("Active!");
-        /*debugger;
-        this.isActive= !this.isActive;
-        if(this.isActive) {
-          this.selected = this.val;
-        }
-        */
-        this.selectedval = val;
+        this.$bus.$emit('tagSelected', {title: this.title, key: this.id});
       }
     },
     template: "<div class='PlayListTag'>\
-          <div class='inner'>\
+          <div class='inner' v-on:click='toggleActive'>\
             <div class='title'>{{title}}</div>\
             <div v-if='show_buttons === true' class='buttons'>\
               <button class='btn' title='Перемешать плейлист' v-on:click.stop='random'>\
@@ -137,11 +139,18 @@ $(document).ready(function(){
         type: String
       }
     },
+    mounted() {
+      this.$bus.$on('tagSelected', this.selectTag);
+    },
+    destroyed() {
+      this.$bus.$off('tagSelected')
+    },
     methods: {
-      selectTag: function(oEvent) {
+      selectTag: function(oData) {
 
-        alert("Click!");
-        console.log("click tag")
+        alert(oData.key);
+        console.dir(oData);
+
       }
     },
     template: "<div class='PlayListGroup' v-bind:class='[styleclass]'>\
@@ -162,7 +171,14 @@ $(document).ready(function(){
     </div>'
   });
 
-
+  var oEventBus = new Vue();
+  Object.defineProperties(Vue.prototype, {
+  $bus: {
+    get: function () {
+      return oEventBus
+    }
+  }
+})
   var player = new Vue({
     el: '#app',
     data: {
@@ -171,7 +187,7 @@ $(document).ready(function(){
           id: "1",
           title: "Настоение",
           styleclass: "Emotions",
-          selectedTegId: "11",
+          selectedTagId: "11",
           tags: [
             {
               id: "11",
@@ -202,6 +218,20 @@ $(document).ready(function(){
                 {
                   title: "src4",
                   id: "122"
+                }
+              ]
+            },
+            {
+              id: "13",
+              title: "Погоня",
+              src: [
+                {
+                  title: "src3",
+                  id: "131"
+                },
+                {
+                  title: "src4",
+                  id: "132"
                 }
               ]
             }

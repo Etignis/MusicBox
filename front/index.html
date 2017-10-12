@@ -33,15 +33,17 @@
 
   <playlists>
     <playlist-group
+      :selectedTagId.sync="selectedTagId"
       v-for="arrItem in arr"
       v-bind:key="arrItem.id"
       v-bind:title="arrItem.title">
       <playlist-tag
+        v-bind:class="{'selected': selectedTagId === id}"
         v-for="(tagItem, val) in arrItem.tags"
         v-bind:key="tagItem.id"
+        v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"
-        v-bind:show_buttons="tagItem.showButtons"
-        v-on:click='toggleActive(tagItem)'>
+        v-bind:show_buttons="tagItem.showButtons">
         <playlist-source-option
           v-for="srcItem in tagItem.src"
           v-bind:key="srcItem.id"
