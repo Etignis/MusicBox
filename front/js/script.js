@@ -159,6 +159,19 @@ $(document).ready(function(){
     </div>'
   });
 
+  var Toggle = Vue.extend({
+  template: '#vue-toggle',
+  props: ['values','selected','default'],
+  ready: function () {
+    this.selected = this.default;
+  },
+  methods: {
+    changeSelectVal: function(val) {
+      this.selected = val;
+    }
+  }
+});
+Vue.component('vue-toggle', Toggle);
 
   var player = new Vue({
     el: '#app',
@@ -168,7 +181,7 @@ $(document).ready(function(){
           id: "1",
           title: "Настоение",
           styleclass: "Emotions",
-          selectedTegId: "11",
+          selectedTegId: "",
           tags: [
             {
               id: "11",

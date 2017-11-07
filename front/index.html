@@ -51,7 +51,13 @@
     </playlist-group>
   </playlists>
 
-
+  <vue-toggle :values="arr[0].tags" :selected.sync="arr.selectedTegId" default="11"></vue-toggle>
+  
+  <template id="vue-toggle">
+    <div class="PlayListGroup">
+      <div class='PlayListTag' v-for="el in values" @click="changeSelectVal(el.id)" :class="['btn', { 'btn-danger': selected === el.id, 'btn-default': selected !== el.id }]">{{ el.title }}</div>
+    </div>
+  </template>
 
 
  <!-- player & settings -->
