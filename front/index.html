@@ -30,16 +30,15 @@
  <div id='app'>
 
   <!-- PlayLists -->
-
+ <!--v-bind:class="{'selected': arrItem.selectedTagId === arrItem.id}"-->
   <playlists>
     <playlist-group
-      :selectedTagId.sync="selectedTagId"
       v-for="arrItem in arr"
+      :selectedTagId.sync="arrItem.selectedTagId"
       v-bind:key="arrItem.id"
       v-bind:title="arrItem.title">
       <playlist-tag
-        v-bind:class="{'selected': selectedTagId === id}"
-        v-for="(tagItem, val) in arrItem.tags"
+        v-for="(tagItem, val) in arrItem.tags" 
         v-bind:key="tagItem.id"
         v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"

@@ -86,7 +86,10 @@ $(document).ready(function(){
     computed: {
       bShowSettings: function() {
         return this.show_settings
-      }
+      },
+	  isSelected: function() {
+		  
+	  }
     },
     methods: {
     	random: function(oEvent) {
@@ -103,7 +106,7 @@ $(document).ready(function(){
         this.$bus.$emit('tagSelected', {title: this.title, key: this.id});
       }
     },
-    template: "<div class='PlayListTag'>\
+    template: "<div class='PlayListTag' v-bind:class='isSelected'>\
           <div class='inner' v-on:click='toggleActive'>\
             <div class='title'>{{title}}</div>\
             <div v-if='show_buttons === true' class='buttons'>\
