@@ -10,9 +10,6 @@ $(document).ready(function(){
         type: String,
         default: "linear-gradient(to right, #transparent 0%, #transparent 0%, #fff 0.1%, #fff 100%)"
       },/**/
-      percent: {
-        type: Number
-      },
       color: {
         type: String,
         default: "#7986CB"
@@ -24,7 +21,7 @@ $(document).ready(function(){
     },
 	data: function(){
 		return {
-			
+			percent: 0
 		};
 	},
     methods: {
@@ -38,7 +35,7 @@ $(document).ready(function(){
     computed: {
       grad0: function(){
         //return "linear-gradient(to right, #transparent 0%, #transparent "+this.percent+"%, #fff "+this.percent+".1%, #fff 100%)";
-		//return "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
+		return "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+this.percent+"%, "+this.bgcolor+" "+this.percent+".1%, "+this.bgcolor+" 100%)";
       }
     },
     created: function(){
