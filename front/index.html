@@ -31,14 +31,16 @@
 
   <!-- PlayLists -->
  <!--v-bind:class="{'selected': arrItem.selectedTagId === arrItem.id}"-->
+     <!-- v-bind:selectedTagId.sync="arrItem.selectedTagId"-->
   <playlists>
     <playlist-group
       v-for="arrItem in arr"
-      :selectedTagId.sync="arrItem.selectedTagId"
       v-bind:key="arrItem.id"
+      v-bind:choosen.sync="arrItem.selectedTagId"
       v-bind:title="arrItem.title">
       <playlist-tag
-        v-for="(tagItem, val) in arrItem.tags" 
+        v-for="tagItem in arrItem.tags" 
+		v-bind:choosen.sync="arrItem.selectedTagId"
         v-bind:key="tagItem.id"
         v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"
@@ -53,7 +55,7 @@
   </playlists>
 
 
-
+<pre>{{arr}}</pre>
 
  <!-- player & settings -->
  <div class='BottomPanel'>

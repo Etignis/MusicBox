@@ -81,6 +81,10 @@ $(document).ready(function(){
       },
       val: {
         type: String
+      },
+      choosen: {
+        type: String,
+        default: "--"
       }
     },
     computed: {
@@ -88,27 +92,30 @@ $(document).ready(function(){
         return this.show_settings
       },
 	  isSelected: function() {
-		  
+		 return {
+			 active: this.id == this.choosen		 
+		 };
 	  }
     },
     methods: {
     	random: function(oEvent) {
-      	alert('random');
+			alert('random');
       },
     	fix: function(oEvent) {
-      	alert('fix');
+			alert('fix');
       },
       toggleSettings: function(oEvent) {
         	this.show_settings = !this.show_settings;
       },
       toggleActive: function(val) {
-        alert("Active!");
+		//this.choosen =  this.id;
+       // alert("Active!");
         this.$bus.$emit('tagSelected', {title: this.title, key: this.id});
       }
     },
     template: "<div class='PlayListTag' v-bind:class='isSelected'>\
           <div class='inner' v-on:click='toggleActive'>\
-            <div class='title'>{{title}}</div>\
+            <div class='title'>{{title}} ({{choosen}})</div>\
             <div v-if='show_buttons === true' class='buttons'>\
               <button class='btn' title='Перемешать плейлист' v-on:click.stop='random'>\
                 <i class='fa fa-random' aria-hidden='true'></i>\
@@ -134,6 +141,10 @@ $(document).ready(function(){
         type: String,
         default: "заголовок"
       },
+      choosen: {
+        type: String,
+        default: "-"
+      },
       styleclass: {
         type: String,
         default: "заголовок"
@@ -151,7 +162,7 @@ $(document).ready(function(){
     methods: {
       selectTag: function(oData) {
 
-        alert(oData.key);
+        alert(oData.key+" "+this.choosen);
         console.dir(oData);
 
       }
@@ -159,7 +170,7 @@ $(document).ready(function(){
     template: "<div class='PlayListGroup' v-bind:class='[styleclass]'>\
       <div class='PlayListGroupTitle'>\
         <div class='title'>\
-           {{title}}\
+           {{title}} ({{selectedTagId}}|{{choosen}})\
         </div>\
       </div>\
       <div class='flexContent' id='PlayListGroupEmotions'>\
@@ -189,6 +200,7 @@ $(document).ready(function(){
         {
           id: "1",
           title: "Настоение",
+		  smth: "00",
           styleclass: "Emotions",
           selectedTagId: "11",
           tags: [
@@ -244,6 +256,7 @@ $(document).ready(function(){
           id: "2",
           title: "Места",
           styleclass: "Places",
+          selectedTagId: "21",
           tags: [
             {
               id: "21",
