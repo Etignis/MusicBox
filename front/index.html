@@ -36,11 +36,11 @@
     <playlist-group
       v-for="arrItem in arr"
       v-bind:key="arrItem.id"
-      v-bind:choosen.sync="arrItem.selectedTagId"
+      v-bind:choosen="arrItem.selectedTagId"
       v-bind:title="arrItem.title">
       <playlist-tag
         v-for="tagItem in arrItem.tags" 
-		v-bind:choosen.sync="arrItem.selectedTagId"
+		v-bind:choosen="arrItem.selectedTagId"
         v-bind:key="tagItem.id"
         v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"

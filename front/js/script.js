@@ -22,6 +22,11 @@ $(document).ready(function(){
         default: "#eee"
       }
     },
+	data: function(){
+		return {
+			
+		};
+	},
     methods: {
       restyle: function(oEvent) {
         var nPercent = oEvent? oEvent.currentTarget.value : this.value;
@@ -32,7 +37,8 @@ $(document).ready(function(){
     },
     computed: {
       grad0: function(){
-        return "linear-gradient(to right, #transparent 0%, #transparent "+this.percent+"%, #fff "+this.percent+".1%, #fff 100%)";
+        //return "linear-gradient(to right, #transparent 0%, #transparent "+this.percent+"%, #fff "+this.percent+".1%, #fff 100%)";
+		//return "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
       }
     },
     created: function(){
@@ -148,9 +154,6 @@ $(document).ready(function(){
       styleclass: {
         type: String,
         default: "заголовок"
-      },
-      selectedTagId: {
-        type: String
       }
     },
     mounted() {
@@ -161,8 +164,8 @@ $(document).ready(function(){
     },
     methods: {
       selectTag: function(oData) {
-
-        alert(oData.key+" "+this.choosen);
+		this.choosen = oData.key
+        //alert(oData.key+" "+this.choosen);
         console.dir(oData);
 
       }
@@ -170,7 +173,7 @@ $(document).ready(function(){
     template: "<div class='PlayListGroup' v-bind:class='[styleclass]'>\
       <div class='PlayListGroupTitle'>\
         <div class='title'>\
-           {{title}} ({{selectedTagId}}|{{choosen}})\
+           {{title}} ({{choosen}})\
         </div>\
       </div>\
       <div class='flexContent' id='PlayListGroupEmotions'>\
