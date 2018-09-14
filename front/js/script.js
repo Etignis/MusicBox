@@ -46,7 +46,7 @@ $(document).ready(function(){
     created: function(){
       this.restyle();
     },
-    template: "<input type='range' :value='value' :style='{ background: grad}' @mousemove='restyle' @mousedown='restyle' @input='restyle'>"
+    template: "<input type='range' :value='value' :style='{ background: grad}' @input='restyle'>"
   });
 
 
