@@ -67,7 +67,7 @@
       <!-- Timeline -->
       <div class='TimeLineWrapper'>
         <!-- <input type='range'> -->
-        <range></range>
+        <range v-model.number='player.track.val'></range>
       </div>
     </div>
 
@@ -76,7 +76,7 @@
       <div class='VolumeWrapper'>
         <i class="fa fa-volume-down" aria-hidden="true"></i>
         <div class='rangeWrapper'>
-          <range value='50'></range>
+          <range v-model.number='player.volume.val'></range>
         </div>
         <i class="fa fa-volume-up" aria-hidden="true"></i>
       </div>

@@ -3,9 +3,9 @@ $(document).ready(function(){
   Vue.component('range', {
     props: {
       value: {
-        type: String,
+        type: Number,
         default: '0'
-      },/**/
+      },/*/
       grad: {
         type: String,
         default: "linear-gradient(to right, #transparent 0%, #transparent 0%, #fff 0.1%, #fff 100%)"
@@ -25,23 +25,28 @@ $(document).ready(function(){
 		};
 	},
     methods: {
-      restyle: function(oEvent) {
-        var nPercent = oEvent? oEvent.currentTarget.value : this.value;
-        this.value = nPercent;
-        //this.percent = nPercent;
-        this.grad = "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
-      }
+      // restyle: function(oEvent) {
+        // var nPercent = oEvent? oEvent.currentTarget.value : this.value;
+        // this.value = nPercent;
+       // // this.percent = nPercent;
+        // this.grad = "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
+      // }
+	  restyle(e) {
+		  if(e && e.target){
+			this.$emit('input', +e.target.value);
+		  }
+		}
     },
     computed: {
-      grad0: function(){
-        //return "linear-gradient(to right, #transparent 0%, #transparent "+this.percent+"%, #fff "+this.percent+".1%, #fff 100%)";
-		return "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+this.percent+"%, "+this.bgcolor+" "+this.percent+".1%, "+this.bgcolor+" 100%)";
-      }
+       grad() {
+		  const { color, value, bgcolor } = this;
+		  return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
+		}	
     },
     created: function(){
       this.restyle();
     },
-    template: "<input type='range' v-bind:value='value' v-bind:style='{ background: grad}' @mousemove='restyle' @mousedown='restyle'>"
+    template: "<input type='range' :value='value' :style='{ background: grad}' @mousemove='restyle' @mousedown='restyle' @input='restyle'>"
   });
 
 
@@ -193,6 +198,7 @@ $(document).ready(function(){
     }
   }
 })
+  
   var player = new Vue({
     el: '#app',
     data: {
@@ -282,7 +288,16 @@ $(document).ready(function(){
             }
           ]
         }
-      ]
+      ],
+
+	  player: {
+		  track: {
+			  val: 0
+		  },
+		  volume: {
+			  val: 50
+		  },
+	  }
     }
   });
 });
