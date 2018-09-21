@@ -158,6 +158,11 @@ $(document).ready(function(){
         default: "заголовок"
       }
     },
+	data: function() {
+		return {
+			selected: this.choosen
+		}
+	},
     mounted() {
       this.$bus.$on('tagSelected', this.selectTag);
     },
@@ -175,7 +180,7 @@ $(document).ready(function(){
     template: "<div class='PlayListGroup' v-bind:class='[styleclass]'>\
       <div class='PlayListGroupTitle'>\
         <div class='title'>\
-           {{title}} ({{choosen}})\
+           {{title}}, ({{choosen}},  {{selected}})\
         </div>\
       </div>\
       <div class='flexContent' id='PlayListGroupEmotions'>\
