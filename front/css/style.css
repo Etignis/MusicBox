@@ -208,6 +208,9 @@ input:focus,
 .btn:focus {
   box-shadow: 0 0 3px 3px rgba(121, 134, 203, 0.3);
 }
+.fullWidth {
+  width: 100%;
+}
 .PlayLists {
   display: flex;
   flex-direction: row;
@@ -313,7 +316,7 @@ input:focus,
   padding: .1rem;
 }
 .BottomPanel {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
@@ -391,5 +394,3 @@ input:focus,
   margin: 0.3rem;
   font-size: 230%;
 }
-
-/*# sourceMappingURL=style.css.map */

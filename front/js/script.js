@@ -38,10 +38,10 @@ $(document).ready(function(){
 		}
     },
     computed: {
-       grad() {
-		  const { color, value, bgcolor } = this;
-		  return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
-		}	
+			grad() {
+				const { color, value, bgcolor } = this;
+				return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
+			}	
     },
     created: function(){
       this.restyle();
@@ -77,23 +77,18 @@ $(document).ready(function(){
       	type: Boolean,
         default: false
       },
-      isActive: {
-      	type: Boolean,
-        default: false
-      },
+
       sources: {
         type: Array
       },
-      selectedval: {
-        type: String
-      },
-      val: {
-        type: String
-      },
+
       choosen: {
         type: String,
         default: "--"
-      }
+      },
+      checked: {
+        type: Array
+      },
     },
     computed: {
       bShowSettings: function() {
@@ -101,24 +96,24 @@ $(document).ready(function(){
       },
 	  isSelected: function() {
 		 return {
-			 active: this.id == this.choosen		 
+			 active: (this.checked.indexOf(this.id)>-1) //this.id == this.choosen; // (this.checked.indexOf(this.id)>-1)
 		 };
 	  }
     },
     methods: {
     	random: function(oEvent) {
-			alert('random');
+				alert('random');
       },
     	fix: function(oEvent) {
-			alert('fix');
+				alert('fix');
       },
       toggleSettings: function(oEvent) {
-        	this.show_settings = !this.show_settings;
+        this.show_settings = !this.show_settings;
       },
       toggleActive: function(val) {
-		//this.choosen =  this.id;
+				//this.choosen =  this.id;
        // alert("Active!");
-        this.$bus.$emit('tagSelected', {title: this.title, key: this.id});
+        //this.$bus.$emit('tagSelected', {title: this.title, key: this.id});
       }
     },
     template: "<div class='PlayListTag' v-bind:class='isSelected'>\
@@ -153,34 +148,27 @@ $(document).ready(function(){
         type: String,
         default: "-"
       },
+      checked: {
+        type: Array
+      },
       styleclass: {
         type: String,
-        default: "заголовок"
+        default: ""
       }
-    },
-	data: function() {
-		return {
-			selected: this.choosen
-		}
-	},
+    },	
     mounted() {
-      this.$bus.$on('tagSelected', this.selectTag);
+      //this.$bus.$on('tagSelected', this.selectTag);
     },
     destroyed() {
-      this.$bus.$off('tagSelected')
+      //this.$bus.$off('tagSelected')
     },
     methods: {
-      selectTag: function(oData) {
-		this.choosen = oData.key
-        //alert(oData.key+" "+this.choosen);
-        console.dir(oData);
-
-      }
+     
     },
     template: "<div class='PlayListGroup' v-bind:class='[styleclass]'>\
       <div class='PlayListGroupTitle'>\
         <div class='title'>\
-           {{title}}, ({{choosen}},  {{selected}})\
+           {{title}}, ({{choosen}}, {{checked}})\
         </div>\
       </div>\
       <div class='flexContent' id='PlayListGroupEmotions'>\
@@ -209,11 +197,48 @@ $(document).ready(function(){
     data: {
       arr: [
         {
+          id: "2",
+          title: "Места",
+          styleclass: "compactWidth",
+          selectedTagId: "21",
+					selectType: "radio",
+          selectedTagIds: [
+							"21"
+						],
+          tags: [
+            {
+              id: "21",
+              title: "Везде",
+              showButtons: false,
+              src: [
+                {
+                  title: "src1",
+                  id: "211"
+                }
+              ]
+            },
+            {
+              id: "22",
+              title: "Заброшка",
+              showButtons: false,
+              src: [
+                {
+                  title: "src1",
+                  id: "221"
+                }
+              ]
+            }
+          ]
+        },
+        {
           id: "1",
           title: "Настоение",
-		  smth: "00",
-          styleclass: "Emotions",
+          styleclass: "compactWidth",
           selectedTagId: "11",
+					selectType: "radio",
+          selectedTagIds: [
+							"11"
+						],
           tags: [
             {
               id: "11",
@@ -264,30 +289,67 @@ $(document).ready(function(){
           ]
         },
         {
-          id: "2",
-          title: "Места",
-          styleclass: "Places",
-          selectedTagId: "21",
+          id: "3",
+          title: "Окружение",
+          styleclass: "fullWidth",
+					selectType: "check",
+          selectedTagIds: [
+							"31",
+							"33"
+						],
           tags: [
             {
-              id: "21",
-              title: "Везде",
+              id: "31",
+              title: "Дождь",
               showButtons: false,
               src: [
                 {
                   title: "src1",
-                  id: "211"
+                  id: "311"
                 }
               ]
             },
             {
-              id: "22",
-              title: "Заброшка",
+              id: "32",
+              title: "Толпа",
               showButtons: false,
               src: [
                 {
                   title: "src1",
-                  id: "221"
+                  id: "321"
+                }
+              ]
+            },
+            {
+              id: "33",
+              title: "Огонь",
+              showButtons: false,
+              src: [
+                {
+                  title: "src1",
+                  id: "331"
+                }
+              ]
+            },
+            {
+              id: "34",
+              title: "Река",
+              showButtons: false,
+              src: [
+                {
+                  title: "src1",
+                  id: "341"
+                }
+              ]
+            },
+            {
+              id: "35",
+              title: "Лес днем",
+              showButtons: false,
+              src: [
+                {
+                  title: "src1",
+                  id: "351"
                 }
               ]
             }
@@ -295,14 +357,32 @@ $(document).ready(function(){
         }
       ],
 
-	  player: {
-		  track: {
-			  val: 0
-		  },
-		  volume: {
-			  val: 50
-		  },
-	  }
-    }
+			player: {
+				track: {
+					val: 0
+				},
+				volume: {
+					val: 50
+				},
+			}
+    },
+		methods: {
+			onSelectTag(tags, id) {
+				if(tags.selectType == 'radio') {
+					tags.selectedTagIds.pop();
+					tags.selectedTagIds.push(id);
+				} else {
+					if(tags.selectedTagIds.indexOf(id)>-1) { // exists
+						for(var i=0; i<tags.selectedTagIds.length; i++) {
+							if(tags.selectedTagIds[i] == id) {
+								tags.selectedTagIds.splice(i,1);
+							}
+						}
+					} else { // no exists
+						tags.selectedTagIds.push(id);
+					}
+				}
+			}
+		}
   });
 });

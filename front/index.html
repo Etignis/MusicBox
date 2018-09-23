@@ -35,14 +35,18 @@
       v-for="arrItem in arr"
       v-bind:key="arrItem.id"
       v-bind:choosen="arrItem.selectedTagId"
-      v-bind:title="arrItem.title">
+      v-bind:checked="arrItem.selectedTagIds"
+      v-bind:title="arrItem.title"
+      v-bind:styleclass="arrItem.styleclass">
       <playlist-tag
         v-for="tagItem in arrItem.tags" 
-		v-bind:choosen="arrItem.selectedTagId"
+				v-bind:choosen="arrItem.selectedTagId"
+				v-bind:checked="arrItem.selectedTagIds"
         v-bind:key="tagItem.id"
         v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"
-        v-bind:show_buttons="tagItem.showButtons">
+        v-bind:show_buttons="tagItem.showButtons"
+				@click.native="onSelectTag(arrItem, tagItem.id)">
         <playlist-source-option
           v-for="srcItem in tagItem.src"
           v-bind:key="srcItem.id"
@@ -52,8 +56,10 @@
     </playlist-group>
   </playlists>
 
-
+<div style='padding-bottom: 6rem'>
 <pre>{{arr}}</pre>
+<pre>{{player}}</pre>
+</div>
 
  <!-- player & settings -->
  <div class='BottomPanel'>
