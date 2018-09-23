@@ -79,7 +79,10 @@ $(document).ready(function(){
       },
 
       sources: {
-        type: Array
+        type: Array,
+				default: function(){
+					return [];
+				}
       },
 
       choosen: {
@@ -87,7 +90,10 @@ $(document).ready(function(){
         default: "--"
       },
       checked: {
-        type: Array
+        type: Array,
+				default: function(){
+					return [];
+				}
       },
     },
     computed: {
@@ -149,7 +155,10 @@ $(document).ready(function(){
         default: "-"
       },
       checked: {
-        type: Array
+        type: Array,
+				default: function(){
+					return [];
+				}
       },
       styleclass: {
         type: String,

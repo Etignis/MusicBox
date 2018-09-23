@@ -276,7 +276,7 @@ input:focus,
   border: 0.2rem solid rgba(255, 255, 255, 0);
 }
 .PlayListGroup .PlayListTag:hover .inner {
-  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.5);
   box-shadow: 0 5px 3px 2px rgba(0, 0, 0, 0.02), 0 0px 0px 5px rgba(121, 134, 203, 0.02);
 }
 .PlayListGroup .PlayListTag.active .inner {
