@@ -37,7 +37,8 @@
       v-bind:choosen="arrItem.selectedTagId"
       v-bind:checked="arrItem.selectedTagIds"
       v-bind:title="arrItem.title"
-      v-bind:styleclass="arrItem.styleclass">
+      v-bind:styleclass="arrItem.styleclass"
+      v-bind:visible="arrItem.visible">
       <playlist-tag
         v-for="tagItem in arrItem.tags" 
 				v-bind:choosen="arrItem.selectedTagId"

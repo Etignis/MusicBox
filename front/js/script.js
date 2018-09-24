@@ -163,7 +163,11 @@ $(document).ready(function(){
       styleclass: {
         type: String,
         default: ""
-      }
+      },
+			visible: {
+				type: Boolean,
+				default: true
+			}
     },	
     mounted() {
       //this.$bus.$on('tagSelected', this.selectTag);
@@ -174,7 +178,7 @@ $(document).ready(function(){
     methods: {
      
     },
-    template: "<div class='PlayListGroup' v-bind:class='[styleclass]'>\
+    template: "<div class='PlayListGroup' v-bind:class='[styleclass]' v-show='visible'>\
       <div class='PlayListGroupTitle'>\
         <div class='title'>\
            {{title}}, ({{choosen}}, {{checked}})\
@@ -204,167 +208,193 @@ $(document).ready(function(){
   var player = new Vue({
     el: '#app',
     data: {
-      arr: [
-        {
-          id: "2",
-          title: "Места",
-          styleclass: "compactWidth",
-          selectedTagId: "21",
-					selectType: "radio",
-          selectedTagIds: [
-							"21"
-						],
-          tags: [
-            {
-              id: "21",
-              title: "Везде",
-              showButtons: false,
-              src: [
-                {
-                  title: "src1",
-                  id: "211"
-                }
-              ]
-            },
-            {
-              id: "22",
-              title: "Заброшка",
-              showButtons: false,
-              src: [
-                {
-                  title: "src1",
-                  id: "221"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: "1",
-          title: "Настоение",
-          styleclass: "compactWidth",
-          selectedTagId: "11",
-					selectType: "radio",
-          selectedTagIds: [
-							"11"
-						],
-          tags: [
-            {
-              id: "11",
-              title: "Фон",
-              src: [
-                {
-                  title: "src1",
-                  id: "111"
-                },
-                {
-                  title: "src2",
-                  id: "112"
-                },
-                {
-                  title: "src3",
-                  id: "113"
-                }
-              ]
-            },
-            {
-              id: "12",
-              title: "Экшн",
-              src: [
-                {
-                  title: "src3",
-                  id: "121"
-                },
-                {
-                  title: "src4",
-                  id: "122"
-                }
-              ]
-            },
-            {
-              id: "13",
-              title: "Погоня",
-              src: [
-                {
-                  title: "src3",
-                  id: "131"
-                },
-                {
-                  title: "src4",
-                  id: "132"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: "3",
-          title: "Окружение",
-          styleclass: "fullWidth",
-					selectType: "check",
-          selectedTagIds: [
-							"31",
-							"33"
-						],
-          tags: [
-            {
-              id: "31",
-              title: "Дождь",
-              showButtons: false,
-              src: [
-                {
-                  title: "src1",
-                  id: "311"
-                }
-              ]
-            },
-            {
-              id: "32",
-              title: "Толпа",
-              showButtons: false,
-              src: [
-                {
-                  title: "src1",
-                  id: "321"
-                }
-              ]
-            },
-            {
-              id: "33",
-              title: "Огонь",
-              showButtons: false,
-              src: [
-                {
-                  title: "src1",
-                  id: "331"
-                }
-              ]
-            },
-            {
-              id: "34",
-              title: "Река",
-              showButtons: false,
-              src: [
-                {
-                  title: "src1",
-                  id: "341"
-                }
-              ]
-            },
-            {
-              id: "35",
-              title: "Лес днем",
-              showButtons: false,
-              src: [
-                {
-                  title: "src1",
-                  id: "351"
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      main: {
+				array: [
+					{
+						places: {
+							id: "2",
+							title: "Места",
+							styleclass: "compactWidth",
+							selectedTagId: "21",
+							selectType: "radio",
+							selectedTagIds: [
+									"21"
+								],
+							tags: [
+								{
+									id: "21",
+									title: "Везде",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "211"
+										}
+									]
+								},
+								{
+									id: "22",
+									title: "Заброшка",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "221"
+										}
+									]
+								}
+							]
+						},
+						tone: {
+							id: "1",
+							title: "Настоение",
+							styleclass: "compactWidth",
+							selectedTagId: "11",
+							selectType: "radio",
+							selectedTagIds: [
+									"11"
+								],
+							tags: [
+								{
+									id: "11",
+									title: "Фон",
+									src: [
+										{
+											title: "src1",
+											id: "111"
+										},
+										{
+											title: "src2",
+											id: "112"
+										},
+										{
+											title: "src3",
+											id: "113"
+										}
+									]
+								},
+								{
+									id: "12",
+									title: "Экшн",
+									src: [
+										{
+											title: "src3",
+											id: "121"
+										},
+										{
+											title: "src4",
+											id: "122"
+										}
+									]
+								},
+								{
+									id: "13",
+									title: "Погоня",
+									src: [
+										{
+											title: "src3",
+											id: "131"
+										},
+										{
+											title: "src4",
+											id: "132"
+										}
+									]
+								}
+							]
+						},
+						embient: {
+							id: "3",
+							title: "Окружение",
+							styleclass: "fullWidth",
+							selectType: "check",
+							selectedTagIds: [
+									"31",
+									"33"
+								],
+							tags: [
+								{
+									id: "31",
+									title: "Дождь",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "311"
+										}
+									]
+								},
+								{
+									id: "32",
+									title: "Толпа",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "321"
+										}
+									]
+								},
+								{
+									id: "33",
+									title: "Огонь",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "331"
+										}
+									]
+								},
+								{
+									id: "34",
+									title: "Река",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "341"
+										}
+									]
+								},
+								{
+									id: "35",
+									title: "Лес днем",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "351"
+										}
+									]
+								}
+							]
+						},
+						sounds: {
+							id: "4",
+							title: "Звуки",
+							styleclass: "fullScreen overlay",
+							visible: false,
+							selectType: "button",
+							tags: [
+								{
+									id: "41",
+									title: "Бум",
+									ico: "",
+									showButtons: false,
+									src: [
+										{
+											title: "src1",
+											id: "411"
+										}
+									]
+								},
+							]
+						}
+					}
+				],
+				selectedIndex: 0
+			},
 
 			player: {
 				track: {
@@ -375,12 +405,18 @@ $(document).ready(function(){
 				},
 			}
     },
+		computed: {
+			arr: function(){
+				return this.main.array[this.main.selectedIndex];
+			}
+		},
 		methods: {
 			onSelectTag(tags, id) {
-				if(tags.selectType == 'radio') {
+				if (tags.selectType == 'radio') {
 					tags.selectedTagIds.pop();
 					tags.selectedTagIds.push(id);
-				} else {
+				} 
+				if (tags.selectType == 'check') {
 					if(tags.selectedTagIds.indexOf(id)>-1) { // exists
 						for(var i=0; i<tags.selectedTagIds.length; i++) {
 							if(tags.selectedTagIds[i] == id) {
