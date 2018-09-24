@@ -37,19 +37,19 @@
     <playlist-group
       v-for="arrItem in arr"
       v-bind:key="arrItem.id"
-      v-bind:choosen="arrItem.selectedTagId"
       v-bind:checked="arrItem.selectedTagIds"
       v-bind:title="arrItem.title"
       v-bind:styleclass="arrItem.styleclass"
       v-bind:visible="arrItem.visible">
       <playlist-tag
         v-for="tagItem in arrItem.tags" 
-				v-bind:choosen="arrItem.selectedTagId"
 				v-bind:checked="arrItem.selectedTagIds"
         v-bind:key="tagItem.id"
         v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"
         v-bind:show_buttons="tagItem.showButtons"
+        v-bind:show_volume="tagItem.showVolume"
+        v-bind:volume="tagItem.volume"
 				@click.native="onSelectTag(arrItem, tagItem.id)">
         <playlist-source-option
           v-for="srcItem in tagItem.src"
@@ -81,24 +81,32 @@
 
     <div class='PlayerRulePanel'>
       <!-- Sound Volume -->
-      <div class='VolumeWrapper'>
+      <!-- 
+			<div class='VolumeWrapper'>
         <i class="fa fa-volume-down" aria-hidden="true"></i>
         <div class='rangeWrapper'>
           <range v-model.number='player.volume.val'></range>
         </div>
         <i class="fa fa-volume-up" aria-hidden="true"></i>
       </div>
+			-->
+				<volume-range v-model.number='player.volume.val' ></volume-range>
 
       <!-- Buttons -->
       <div class='ButtonPlace'>
         <!-- Play/Pause -->
-        <button class='btn' id='PlayerPlayPauseButton'>
+        <!--button class='btn' id='PlayerPlayPauseButton'>
            <i class="fa fa-play" aria-hidden="true"></i>
-        </button>
+        </button-->
+				
+				<player-play-button :state="player.isPlayed" @click.native='onPlayPauseClick'>
+				</player-play-button>
         <!-- Next Track -->
-        <button class='btn' id='PlayerNextTrackButton'>
+        <!--button class='btn' id='PlayerNextTrackButton'>
           <i class="fa fa-forward" aria-hidden="true"></i>
-        </button>
+        </button-->
+				<player-button id="PlayerNextTrackButton" ico="forward">
+				</player-button>
       </div>
 
       <!-- Track Name -->

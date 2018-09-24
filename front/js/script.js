@@ -33,7 +33,7 @@ $(document).ready(function(){
       // }
 	  restyle(e) {
 		  if(e && e.target){
-			this.$emit('input', +e.target.value);
+				this.$emit('input', +e.target.value);
 		  }
 		}
     },
@@ -48,7 +48,122 @@ $(document).ready(function(){
     },
     template: "<input type='range' :value='value' :style='{ background: grad}' @input='restyle'>"
   });
+	
+  Vue.component('volume-range', {
+    props: {
+      value: {
+        type: Number,
+        default: '0'
+      },/*/
+      grad: {
+        type: String,
+        default: "linear-gradient(to right, #transparent 0%, #transparent 0%, #fff 0.1%, #fff 100%)"
+      },/**/
+      color: {
+        type: String,
+        default: "#7986CB"
+      },
+      bgcolor: {
+        type: String,
+        default: "#eee"
+      }
+    },
+	data: function(){
+		return {
+			percent: 0
+		};
+	},
+    methods: {     
+			restyle(e) {
+				if(e && e.target){
+					this.$emit('input', +e.target.value);
+				}
+			},
+			click: function(e) {
+				e.stopImmediatePropagation();
+				return false;
+			}
+    },
+    computed: {
+			grad() {
+				const { color, value, bgcolor } = this;
+				return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
+			},
+			title(){
+				return "Уровень громкости "+this.value+"%"
+			}
+    },
+    created: function(){
+      this.restyle();
+    },
+    template: ` <div class='VolumeWrapper' @click='click' :title="title">
+        <i class="fa fa-volume-down" aria-hidden="true"></i>
+        <div class='rangeWrapper'>
+					<input type='range' :value='value' :style='{ background: grad}' @input='restyle'>
+        </div>
+        <i class="fa fa-volume-up" aria-hidden="true"></i>
+      </div>`
+  });
+	
+  Vue.component('player-button', {
+    props: {
+			id: {
+				type: String
+			},
+			ico: {
+				type: String,
+				default: ""
+			}
+    },
+    methods: {     
+			
+    },
+    computed: {
+			icoShowable: function() {
+				return (this.ico && this.ico.length>0);
+			},
+			styleClass: function() {
+				var oClass={};
 
+				let sIcoName = "fa fa-"+this.ico;
+				oClass[sIcoName] = this.icoShowable;
+
+				return oClass;
+			}
+    },
+    created: function(){
+      
+    },
+    template: `<button class='btn' :id='id'>
+           <i v-if='icoShowable' v-bind:class='styleClass' aria-hidden="true"></i>
+        </button>`
+  });
+	
+  Vue.component('player-play-button', {
+    props: {
+			state: {
+				type: Boolean,
+				default: false
+			}
+    },
+    methods: {     
+
+			},
+    computed: {
+			isPlay: function(e) {
+				return this.state;
+			}
+    },
+    created: function(){
+      
+    },
+    template: `<button class='btn' id='PlayerPlayPauseButton'>
+           <i v-show='isPlay' class='fa fa-pause' aria-hidden="true"></i>
+           <i v-show='!isPlay' class='fa fa-play' aria-hidden="true"></i>
+        </button>`
+  });
+	
+	
 
   Vue.component('playlist-source-option', {
     props: {
@@ -69,9 +184,17 @@ $(document).ready(function(){
       id: {
         type: String
       },
+			volume: {
+				type: Number,
+				default: 50
+			},
       show_buttons: {
       	type: Boolean,
         default: true
+      },
+      show_volume: {
+      	type: Boolean,
+        default: false
       },
       show_settings: {
       	type: Boolean,
@@ -100,15 +223,21 @@ $(document).ready(function(){
       bShowSettings: function() {
         return this.show_settings
       },
-	  isSelected: function() {
-		 return {
-			 active: (this.checked.indexOf(this.id)>-1) //this.id == this.choosen; // (this.checked.indexOf(this.id)>-1)
-		 };
-	  }
+			isSelected: function() {
+				return this.checked.indexOf(this.id)>-1;
+			},
+			styleclass: function() {
+				return {
+					active: (this.checked.indexOf(this.id)>-1) //this.id == this.choosen; // (this.checked.indexOf(this.id)>-1)
+				};
+			}
     },
     methods: {
     	random: function(oEvent) {
 				alert('random');
+      },
+    	play: function(oEvent) {
+				alert('play');
       },
     	fix: function(oEvent) {
 				alert('fix');
@@ -122,26 +251,35 @@ $(document).ready(function(){
         //this.$bus.$emit('tagSelected', {title: this.title, key: this.id});
       }
     },
-    template: "<div class='PlayListTag' v-bind:class='isSelected'>\
-          <div class='inner' v-on:click='toggleActive'>\
-            <div class='title'>{{title}} ({{choosen}})</div>\
-            <div v-if='show_buttons === true' class='buttons'>\
-              <button class='btn' title='Перемешать плейлист' v-on:click.stop='random'>\
-                <i class='fa fa-random' aria-hidden='true'></i>\
-              </button>\
-              <button class='btn' title='Закрепить текущую мелодию' v-on:click.stop='fix'>\
-                <i class='fa fa-thumb-tack' aria-hidden='true'></i>\
-              </button>\
-              <button class='btn' v-bind:class='{ active: show_settings }' title='Выбрать источники' v-on:click.stop='toggleSettings'>\
-                <i class='fa fa-cog' aria-hidden='true'></i>\
-              </button>\
-            </div>\
-          </div>\
-          <div class='settings' v-if='show_settings === true'>\
-          	<div class='s-title'>Источники</div>\
-            <slot></slot>\
-          </div>\
-        </div>"
+    template: `<div class='PlayListTag' v-bind:class='styleclass'>
+          <div class='inner' v-on:click='toggleActive'>
+            <div class='title'>{{title}} ({{choosen}})</div>
+						<div v-if='show_volume === true'>
+							<volume-range v-model.number='this.volume' ></volume-range>
+						</div>	
+            <div v-if='show_buttons === "true"' class='buttons'>
+              <button v-show='!isSelected' class='btn' title='Воспроизведение' v-on:click.stop='play'>
+                <i class='fa fa-play' aria-hidden='true'></i>
+              </button>
+              <button v-show='isSelected' class='btn' title='Пауза' v-on:click.stop='pause'>
+                <i class='fa fa-pause' aria-hidden='true'></i>
+              </button>
+              <button class='btn' title='Перемешать плейлист' v-on:click.stop='random'>
+                <i class='fa fa-random' aria-hidden='true'></i>
+              </button>
+              <button class='btn' title='Закрепить текущую мелодию' v-on:click.stop='fix'>
+                <i class='fa fa-thumb-tack' aria-hidden='true'></i>
+              </button>
+              <button class='btn' v-bind:class='{ active: show_settings }' title='Выбрать источники' v-on:click.stop='toggleSettings'>
+                <i class='fa fa-cog' aria-hidden='true'></i>
+              </button>
+            </div>
+          </div>
+          <div class='settings' v-if='show_settings === true'>
+          	<div class='s-title'>Источники</div>
+            <slot></slot>
+          </div>
+        </div>`
   });
 
   Vue.component('playlist-group', {
@@ -196,14 +334,14 @@ $(document).ready(function(){
     </div>'
   });
 
-  var oEventBus = new Vue();
-  Object.defineProperties(Vue.prototype, {
-  $bus: {
-    get: function () {
-      return oEventBus
-    }
-  }
-})
+	var oEventBus = new Vue();
+	Object.defineProperties(Vue.prototype, {
+		$bus: {
+			get: function () {
+				return oEventBus
+			}
+		}
+	})
   
   var player = new Vue({
     el: '#app',
@@ -258,6 +396,7 @@ $(document).ready(function(){
 								{
 									id: "11",
 									title: "Фон",
+									showButtons: false,
 									src: [
 										{
 											title: "src1",
@@ -276,6 +415,7 @@ $(document).ready(function(){
 								{
 									id: "12",
 									title: "Экшн",
+									showButtons: false,
 									src: [
 										{
 											title: "src3",
@@ -290,6 +430,7 @@ $(document).ready(function(){
 								{
 									id: "13",
 									title: "Погоня",
+									showButtons: false,
 									src: [
 										{
 											title: "src3",
@@ -316,7 +457,9 @@ $(document).ready(function(){
 								{
 									id: "31",
 									title: "Дождь",
-									showButtons: false,
+									showButtons: true,
+									showVolume: true,
+									volume: 70,
 									src: [
 										{
 											title: "src1",
@@ -327,7 +470,9 @@ $(document).ready(function(){
 								{
 									id: "32",
 									title: "Толпа",
-									showButtons: false,
+									showButtons: true,
+									showVolume: true,
+									volume: 10,
 									src: [
 										{
 											title: "src1",
@@ -338,7 +483,9 @@ $(document).ready(function(){
 								{
 									id: "33",
 									title: "Огонь",
-									showButtons: false,
+									showButtons: true,
+									showVolume: true,
+									volume: 30,
 									src: [
 										{
 											title: "src1",
@@ -349,7 +496,9 @@ $(document).ready(function(){
 								{
 									id: "34",
 									title: "Река",
-									showButtons: false,
+									showButtons: true,
+									showVolume: true,
+									volume: 50,
 									src: [
 										{
 											title: "src1",
@@ -360,7 +509,9 @@ $(document).ready(function(){
 								{
 									id: "35",
 									title: "Лес днем",
-									showButtons: false,
+									showButtons: true,
+									showVolume: true,
+									volume: 50,
 									src: [
 										{
 											title: "src1",
@@ -399,11 +550,14 @@ $(document).ready(function(){
 
 			player: {
 				track: {
-					val: 0
+					val: 0,
+					maxTime: 0,
+					curTime: 0
 				},
 				volume: {
 					val: 50
 				},
+				isPlayed: false
 			}
     },
 		computed: {
@@ -438,6 +592,10 @@ $(document).ready(function(){
 						tags.selectedTagIds.push(id);
 					}
 				}
+			},
+			
+			onPlayPauseClick() {
+				this.player.isPlayed = !this.player.isPlayed;
 			}
 		}
   });
