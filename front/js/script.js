@@ -211,7 +211,7 @@ $(document).ready(function(){
       main: {
 				array: [
 					{
-						places: {
+						place: {
 							id: "2",
 							title: "Места",
 							styleclass: "compactWidth",
@@ -385,7 +385,8 @@ $(document).ready(function(){
 									src: [
 										{
 											title: "src1",
-											id: "411"
+											id: "411",
+											count: 1
 										}
 									]
 								},
@@ -408,6 +409,16 @@ $(document).ready(function(){
 		computed: {
 			arr: function(){
 				return this.main.array[this.main.selectedIndex];
+			},
+			musicPlaceFilterValue: function(){
+				return this.arr.place.tags.filter(function(oItem){
+					return oItem.id == this.arr.place.selectedTagIds[0]
+				}.bind(this))[0].title
+			},
+			musicToneFilterValue: function(){
+				return this.arr.tone.tags.filter(function(oItem){
+					return oItem.id == this.arr.tone.selectedTagIds[0]
+				}.bind(this))[0].title
 			}
 		},
 		methods: {
