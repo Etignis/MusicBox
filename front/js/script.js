@@ -1,3 +1,15 @@
+String.prototype.toHHMMSS = function () {
+    var sec_num = parseInt(this, 10); // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+seconds;
+}
+
 $(document).ready(function(){
 
   Vue.component('range', {
@@ -567,8 +579,12 @@ $(document).ready(function(){
 			player: {
 				track: {
 					val: 0,
-					maxTime: 0,
-					curTime: 0
+					maxTime: 50,
+					curTime: 20,
+					entity: {
+						title: "",
+						src: "",
+					}
 				},
 				volume: {
 					val: 50
@@ -709,13 +725,35 @@ $(document).ready(function(){
 			musicPlaceFilterValue: function(){
 				return this.arr.place.tags.filter(function(oItem){
 					return oItem.id == this.arr.place.selectedTagIds[0]
-				}.bind(this))[0].title
+				}.bind(this))[0].id
 			},
 			musicToneFilterValue: function(){
 				return this.arr.tone.tags.filter(function(oItem){
 					return oItem.id == this.arr.tone.selectedTagIds[0]
-				}.bind(this))[0].title
-			}
+				}.bind(this))[0].id
+			},
+			
+			musicTrackDuration: function(){
+				return String(this.player.track.maxTime).toHHMMSS();
+			},			
+			musicTrackCurTime: function(){
+				return String(this.player.track.curTime).toHHMMSS();
+			},	
+			musicTrackLength: {
+				get: function() {
+					return (this.player.track.maxTime)? 100 * (this.player.track.curTime / this.player.track.maxTime): 0;
+				},
+				set: function(newValue){
+					this.player.track.curTime = Math.ceil(this.player.track.maxTime*newValue/100);
+					let oAudio = document.getElementById("PlayerAudio");
+					//oAudio.pause();
+					oAudio.currentTime = this.player.track.curTime;
+					//oAudio.play();
+				}
+				
+			},
+			
+			
 		},
 		methods: {
 			onSelectTag(tags, id) {
@@ -736,8 +774,65 @@ $(document).ready(function(){
 				}
 			},
 			
+			startMainAudio(){
+				let oAudio = document.getElementById("PlayerAudio");
+				//console.log(oAudio.src);
+				oAudio.addEventListener("canplay", function(){
+					oAudio.play();
+					this.player.track.maxTime = oAudio.duration;
+				}.bind(this));
+
+				oAudio.addEventListener("timeupdate", function(){
+					
+					this.player.track.curTime = oAudio.currentTime;
+				}.bind(this)); 
+
+			},
+			
+			pauseMainAudio(){
+				let oAudio = document.getElementById("PlayerAudio");
+				oAudio.pause();
+				//this.player.track.maxTime = oAudio.duration;
+			},
+			
+			findMusicTrack(){
+				let aSuitableTracks = this.musicData.music.list.filter(function(oTrack){
+					if (
+						oTrack.tags.indexOf(this.musicPlaceFilterValue)>-1 &&
+						oTrack.tags.indexOf(this.musicToneFilterValue)>-1
+						) {
+							return true;
+						}
+				}.bind(this));
+				this.player.track.entity = aSuitableTracks[0];
+			},
+			
+			playMusic(){
+				if (this.player.entity) {
+				} else {
+					this.findMusicTrack();
+				}
+				this.startMainAudio();
+			},
+			pauseMusic(){
+				this.pauseMainAudio();
+			},
+			
+			playAll(){
+				this.playMusic();
+			},
+			pauseAll(){
+				this.pauseMusic();
+			},
+			
 			onPlayPauseClick() {
 				this.player.isPlayed = !this.player.isPlayed;
+				
+				if(this.player.isPlayed) {
+					this.playAll();
+				} else {
+					this.pauseAll();
+				}
 			},
 			
 			onFadeClick() {

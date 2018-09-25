@@ -62,8 +62,8 @@
   </playlists>
 
 <div style='padding-bottom: 6rem'>
-<pre>{{arr}}</pre>
 <pre>{{player}}</pre>
+<pre>{{arr}}</pre>
 </div>
 
  <!-- player & settings -->
@@ -76,11 +76,13 @@
       <!-- Timeline -->
       <div class='TimeLineWrapper'>
         <!-- <input type='range'> -->
-        <range v-model.number='player.track.val'></range>
+        <range v-model.number='musicTrackLength'></range>
       </div>
     </div>
 
     <div class='PlayerRulePanel'>
+			<audio id='PlayerAudio' :src='player.track.entity.src'>
+			</audio>
       <!-- Sound Volume -->
       <!-- 
 			<div class='VolumeWrapper'>
@@ -113,16 +115,16 @@
       </div>
 
       <!-- Track Name -->
-      <div id="PlayerTrackNameWrapper">
+      <div id="PlayerTrackNameWrapper" :title="player.track.entity.src">
         <span>
-          Track name 01.mp3
+          {{player.track.entity.title}}<!--Track name 01.mp3-->
         </span>
       </div>
 
       <!-- Time -->
       <div class='TimeWrapper'>
         <span>
-          0:0:12/0:2:44
+          {{musicTrackCurTime}}/{{musicTrackDuration}}
         </span>
       </div>
 
