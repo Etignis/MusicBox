@@ -93,7 +93,7 @@
         <i class="fa fa-volume-up" aria-hidden="true"></i>
       </div>
 			-->
-				<volume-range v-model.number='player.volume.val' ></volume-range>
+				<volume-range v-model.number='player.volume.val' @mouseup.native="changePlayerVolume" @mousemove.native="changePlayerVolume"></volume-range>
 
       <!-- Buttons -->
       <div class='ButtonPlace'>

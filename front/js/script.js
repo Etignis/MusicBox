@@ -50,10 +50,14 @@ $(document).ready(function(){
 		}
     },
     computed: {
-			grad() {
-				const { color, value, bgcolor } = this;
-				return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
-			}	
+			colorPercen: function(){
+				return ~~this.value;
+			},
+			grad:  function(){
+					let { color, value, bgcolor } = this;
+					value = Math.round(value);
+					return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
+				}			
     },
     created: function(){
       this.restyle();
@@ -579,8 +583,8 @@ $(document).ready(function(){
 			player: {
 				track: {
 					val: 0,
-					maxTime: 50,
-					curTime: 20,
+					maxTime: 50.345345,
+					curTime: 20.345345,
 					entity: {
 						title: "",
 						src: "",
@@ -749,10 +753,11 @@ $(document).ready(function(){
 					//oAudio.pause();
 					oAudio.currentTime = this.player.track.curTime;
 					//oAudio.play();
-				}
-				
+				}				
 			},
-			
+			musicTrackVolume: function(){
+				return this.player.volume.val/100;
+			}
 			
 		},
 		methods: {
@@ -781,6 +786,7 @@ $(document).ready(function(){
 					oAudio.play();
 					this.player.track.maxTime = oAudio.duration;
 				}.bind(this));
+				oAudio.volume = this.musicTrackVolume;
 
 				oAudio.addEventListener("timeupdate", function(){
 					
@@ -833,6 +839,11 @@ $(document).ready(function(){
 				} else {
 					this.pauseAll();
 				}
+			},
+			
+			changePlayerVolume: function() {
+				let oAudio = document.getElementById("PlayerAudio");
+				oAudio.volume = this.musicTrackVolume;
 			},
 			
 			onFadeClick() {
