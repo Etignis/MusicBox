@@ -50,6 +50,7 @@
         v-bind:show_buttons="tagItem.showButtons"
         v-bind:show_volume="tagItem.showVolume"
         v-bind:volume="tagItem.volume"
+				v-bind:visible="tagItem.visible">
 				@click.native="onSelectTag(arrItem, tagItem.id)">
         <playlist-source-option
           v-for="srcItem in tagItem.src"
@@ -94,6 +95,8 @@
 
       <!-- Buttons -->
       <div class='ButtonPlace'>
+				<toggle-button id="PlayerFade"  ico="random"  :state="player.isFade"@click.native='onFadeClick'>
+				</toggle-button>
         <!-- Play/Pause -->
         <!--button class='btn' id='PlayerPlayPauseButton'>
            <i class="fa fa-play" aria-hidden="true"></i>

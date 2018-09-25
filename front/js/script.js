@@ -163,6 +163,70 @@ $(document).ready(function(){
         </button>`
   });
 	
+		
+  Vue.component('toggle-button', {
+    props: {
+			state: {
+				type: Boolean,
+				default: false
+			},
+			ico: [String, Array],
+			title: {
+				type: String,
+				default: ""
+			},
+			id: {
+				type: String,
+				deafult: ""
+			}
+    },
+    methods: {     
+
+			},
+    computed: {
+			isPressed: function(e) {
+				return this.state;
+			},
+			icoShowable: function() {
+				return (this.ico && this.ico.length>0);
+			},
+			styleClass: function() {
+				var oClass={};
+				
+				oClass.pressed = this.isPressed;
+
+				return oClass;
+			},
+			icoClass: function() {
+				var oClass={};
+				let sIco = "";
+				if (this.isPressed) {
+					if(Array.isArray(this.ico)){
+						sIco = this.ico[1];
+					} else {
+						sIco = this.ico;
+					}
+				} else {
+					if(Array.isArray(this.ico)){
+						sIco = this.ico[0];						
+					} else {
+						sIco = this.ico;
+					}
+				}
+				let sIcoName = "fa fa-"+sIco;
+				oClass[sIcoName] = this.icoShowable;
+
+				return oClass;
+			}
+    },
+    created: function(){
+      
+    },
+    template: `<button class='tBtn' :id='id' :class="styleClass">
+           <i v-if='icoShowable' :class='icoClass' aria-hidden="true"></i>
+        </button>`
+  });
+	
 	
 
   Vue.component('playlist-source-option', {
@@ -187,6 +251,10 @@ $(document).ready(function(){
 			volume: {
 				type: Number,
 				default: 50
+			},
+			visible: {
+				type: Boolean,
+				default: true
 			},
       show_buttons: {
       	type: Boolean,
@@ -251,7 +319,7 @@ $(document).ready(function(){
         //this.$bus.$emit('tagSelected', {title: this.title, key: this.id});
       }
     },
-    template: `<div class='PlayListTag' v-bind:class='styleclass'>
+    template: `<div v-if='visible' class='PlayListTag' v-bind:class='styleclass'>
           <div class='inner' v-on:click='toggleActive'>
             <div class='title'>{{title}} ({{choosen}})</div>
 						<div v-if='show_volume === true'>
@@ -362,24 +430,17 @@ $(document).ready(function(){
 								{
 									id: "21",
 									title: "Везде",
-									showButtons: false,
-									src: [
-										{
-											title: "src1",
-											id: "211"
-										}
-									]
+									showButtons: false
 								},
 								{
 									id: "22",
 									title: "Заброшка",
-									showButtons: false,
-									src: [
-										{
-											title: "src1",
-											id: "221"
-										}
-									]
+									showButtons: false
+								},
+								{
+									id: "23",
+									title: "Таверна",
+									showButtons: false
 								}
 							]
 						},
@@ -396,51 +457,17 @@ $(document).ready(function(){
 								{
 									id: "11",
 									title: "Фон",
-									showButtons: false,
-									src: [
-										{
-											title: "src1",
-											id: "111"
-										},
-										{
-											title: "src2",
-											id: "112"
-										},
-										{
-											title: "src3",
-											id: "113"
-										}
-									]
+									showButtons: false
 								},
 								{
 									id: "12",
 									title: "Экшн",
-									showButtons: false,
-									src: [
-										{
-											title: "src3",
-											id: "121"
-										},
-										{
-											title: "src4",
-											id: "122"
-										}
-									]
+									showButtons: false
 								},
 								{
 									id: "13",
 									title: "Погоня",
-									showButtons: false,
-									src: [
-										{
-											title: "src3",
-											id: "131"
-										},
-										{
-											title: "src4",
-											id: "132"
-										}
-									]
+									showButtons: false
 								}
 							]
 						},
@@ -449,6 +476,7 @@ $(document).ready(function(){
 							title: "Окружение",
 							styleclass: "fullWidth",
 							selectType: "check",
+							targetFolder: "_embient",
 							selectedTagIds: [
 									"31",
 									"33"
@@ -456,41 +484,37 @@ $(document).ready(function(){
 							tags: [
 								{
 									id: "31",
-									title: "Дождь",
+									title: "Ветер",
 									showButtons: true,
 									showVolume: true,
 									volume: 70,
-									src: [
-										{
-											title: "src1",
-											id: "311"
-										}
+									targetFolder: "wind",
+									list: [
+										0
 									]
 								},
 								{
 									id: "32",
-									title: "Толпа",
+									title: "Море",
 									showButtons: true,
 									showVolume: true,
 									volume: 10,
-									src: [
-										{
-											title: "src1",
-											id: "321"
-										}
+									targetFolder: "sea",
+									list: [
+										0,
+										1
 									]
 								},
 								{
 									id: "33",
-									title: "Огонь",
+									title: "Ночь",
 									showButtons: true,
 									showVolume: true,
 									volume: 30,
-									src: [
-										{
-											title: "src1",
-											id: "331"
-										}
+									targetFolder: "night",
+									list: [
+										0,
+										1
 									]
 								},
 								{
@@ -499,12 +523,8 @@ $(document).ready(function(){
 									showButtons: true,
 									showVolume: true,
 									volume: 50,
-									src: [
-										{
-											title: "src1",
-											id: "341"
-										}
-									]
+									visible: false,
+									
 								},
 								{
 									id: "35",
@@ -512,12 +532,8 @@ $(document).ready(function(){
 									showButtons: true,
 									showVolume: true,
 									volume: 50,
-									src: [
-										{
-											title: "src1",
-											id: "351"
-										}
-									]
+									
+									visible: false,
 								}
 							]
 						},
@@ -557,7 +573,133 @@ $(document).ready(function(){
 				volume: {
 					val: 50
 				},
-				isPlayed: false
+				isPlayed: false,
+				isFade: false
+			},
+			
+			musicData: {
+				music: {
+					list: [
+						{
+							title: "Active 01",
+							src: "music/active/01.mp3",
+							tags: [
+								"21",
+								"22",
+								"12"
+							]
+						},
+						{
+							title: "Active 02",
+							src: "music/active/02.mp3",
+							tags: [
+								"21",
+								"22",
+								"12"
+							]
+						},
+						{
+							title: "Norm 01",
+							src: "music/norm/01.mp3",
+							tags: [
+								"21",
+								"22",
+								"11"
+							]
+						},
+						{
+							title: "Norm 02",
+							src: "music/norm/02.mp3",
+							tags: [
+								"21",
+								"22",
+								"11"
+							]
+						},
+						{
+							title: "Tavern 01",
+							src: "music/tavern/01.mp3",
+							tags: [
+								"23",
+								"11"
+							]
+						},
+						{
+							title: "Tavern 02",
+							src: "music/tavern/02.mp3",
+							tags: [
+								"23",
+								"11"
+							]
+						}
+					]
+				},
+				embient: {
+					rootFolder: "_embient",
+					folders: {
+						"night": {
+							title: "Ночь",
+							list: [
+								{
+									title: "Jungle",
+									src: "jungle.mp3",
+									id: "1"
+								},
+								{
+									title: "Night",
+									src: "night.mp3",
+									id: "2"
+								}
+							]
+						},
+						"sea": {
+							title: "Море",
+							list: [
+								{
+									title: "Jungle",
+									src: "jungle.mp3",
+									id: "1"
+								},
+								{
+									title: "Night",
+									src: "night.mp3",
+									id: "2"
+								},
+							]
+						},
+						"wind": {
+							title: "Ветер",
+							list: [
+								{
+									title: "Ветер",
+									src: "wind.mp3",
+									id: "1"
+								}
+							]
+						},
+					
+					}
+				},
+				sounds: {
+					rootFolder: "_sounds",
+					folders: {
+						"shoot": {
+							title: "Выстрел",
+							list: [
+								{
+									title: "Выстрел 02",
+									src: "выстрел 02.wav",
+									id: "1"
+								},
+								{
+									title: "Осечка 01",
+									src: "осечка 01.wav",
+									id: "2"
+								}
+							]
+						}
+					}
+				}
 			}
     },
 		computed: {
@@ -596,6 +738,10 @@ $(document).ready(function(){
 			
 			onPlayPauseClick() {
 				this.player.isPlayed = !this.player.isPlayed;
+			},
+			
+			onFadeClick() {
+				this.player.isFade = !this.player.isFade;
 			}
 		}
   });
