@@ -17,11 +17,11 @@ $(document).ready(function(){
       value: {
         type: Number,
         default: '0'
-      },/*/
-      grad: {
-        type: String,
-        default: "linear-gradient(to right, #transparent 0%, #transparent 0%, #fff 0.1%, #fff 100%)"
-      },/**/
+      },
+			max: {
+				type: Number,
+				default: 100
+			},
       color: {
         type: String,
         default: "#7986CB"
@@ -31,38 +31,36 @@ $(document).ready(function(){
         default: "#eee"
       }
     },
-	data: function(){
-		return {
-			percent: 0
-		};
-	},
+		data: function(){
+			return {
+				percent: 0
+			};
+		},
     methods: {
-      // restyle: function(oEvent) {
-        // var nPercent = oEvent? oEvent.currentTarget.value : this.value;
-        // this.value = nPercent;
-       // // this.percent = nPercent;
-        // this.grad = "linear-gradient(to right, "+this.color+" 0%, "+this.color+" "+nPercent+"%, "+this.bgcolor+" "+nPercent+".1%, "+this.bgcolor+" 100%)";
-      // }
-	  restyle(e) {
-		  if(e && e.target){
-				this.$emit('input', +e.target.value);
-		  }
-		}
+			restyle(e) {
+				if(e && e.target){
+					this.$emit('input', +e.target.value);
+				}
+			}
     },
     computed: {
 			colorPercen: function(){
 				return ~~this.value;
 			},
 			grad:  function(){
-					let { color, value, bgcolor } = this;
-					value = Math.round(value);
-					return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
+					let { color, value, bgcolor, max} = this;
+					//value = Math.round(value*100/max);
+					value = value*100/max	;
+					let nValueStart = Number(value.toFixed(5));
+					let nValueEnd = Number(0.00002) + Number(nValueStart);
+					//return `linear-gradient(to right, ${color} 0%, ${color} ${value}%, ${bgcolor} ${value}.1%, ${bgcolor} 100%)`;
+					return `linear-gradient(to right, ${color} 0%, ${color} ${nValueStart}%, ${bgcolor} ${nValueEnd}%, ${bgcolor} 100%)`;
 				}			
     },
     created: function(){
       this.restyle();
     },
-    template: "<input type='range' :value='value' :style='{ background: grad}' @input='restyle'>"
+    template: "<input type='range' :value='value' :style='{ background: grad}' @input='restyle' min='0' :max='max'>"
   });
 	
   Vue.component('volume-range', {
@@ -583,6 +581,7 @@ $(document).ready(function(){
 
 			player: {
 				track: {
+					maxVal: 1000,
 					val: 0,
 					maxTime: 50.345345,
 					curTime: 20.345345,
@@ -746,10 +745,10 @@ $(document).ready(function(){
 			},	
 			musicTrackLength: {
 				get: function() {
-					return (this.player.track.maxTime)? 100 * (this.player.track.curTime / this.player.track.maxTime): 0;
+					return (this.player.track.maxTime)? this.player.track.maxVal * (this.player.track.curTime / this.player.track.maxTime): 0;
 				},
 				set: function(newValue){
-					this.player.track.curTime = Math.ceil(this.player.track.maxTime*newValue/100);
+					this.player.track.curTime = Math.ceil(this.player.track.maxTime*newValue / this.player.track.maxVal);
 					let oAudio = document.getElementById("PlayerAudio");
 					//oAudio.pause();
 					oAudio.currentTime = this.player.track.curTime;
@@ -766,6 +765,9 @@ $(document).ready(function(){
 				if (tags.selectType == 'radio') {
 					tags.selectedTagIds.pop();
 					tags.selectedTagIds.push(id);
+					this.pauseMusic();
+					this.player.track.entity={};
+					this.playMusic();
 				} 
 				if (tags.selectType == 'check') {
 					if(tags.selectedTagIds.indexOf(id)>-1) { // exists
@@ -782,15 +784,19 @@ $(document).ready(function(){
 			
 			startMainAudio(){
 				let oAudio = document.getElementById("PlayerAudio");
-				//console.log(oAudio.src);
-				oAudio.addEventListener("canplay", function(){
+				if(oAudio.readyState == 4) {
 					oAudio.play();
-					this.player.track.maxTime = oAudio.duration;
-				}.bind(this));
+				} else {
+					oAudio.addEventListener("canplay", function(){
+						if (this.player.isPlayed) {
+							oAudio.play();
+							this.player.track.maxTime = oAudio.duration;
+						}
+					}.bind(this));
+				}
 				oAudio.volume = this.musicTrackVolume;
 
-				oAudio.addEventListener("timeupdate", function(){
-					
+				oAudio.addEventListener("timeupdate", function(){					
 					this.player.track.curTime = oAudio.currentTime;
 				}.bind(this)); 
 
