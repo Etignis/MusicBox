@@ -21,6 +21,47 @@
 	}
 	
 }
+.tBtn{
+    .flexChild();
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	outline: none;	
+	
+	
+	color: darken(@l-gray, 10%);
+	padding: .6rem .9rem .6rem .9rem ;
+	margin: .1rem;
+	//font-size: 230%;
+	border: 1px solid transparent;
+	border-radius: 3px;
+	
+	transition: color .2s, border .2s, background .2s;
+	
+	&:hover{
+		//color: @color;
+		background: fade(@color, 10%);
+	    border: 1px solid @l-gray;
+	}
+	
+	&:active{
+	    background: fade(@color, 30%);
+	}
+	
+	&.pressed{
+	    background: fade(@l-gray, 50%);
+	    color: @color;
+	    &:hover{
+    		//color: @color;
+    		background: fade(@color, 10%);
+    	    border: 1px solid @l-gray;
+    	}
+    	
+    	&:active{
+    	    background: fade(@color, 30%);
+    	}
+	}
+}
 
 input:focus, 
 .btn:focus{
@@ -31,4 +72,18 @@ input:focus,
 
 .fullWidth{
 	width: 100%;
+}
+
+.VolumeWrapper{
+	.flexParent();
+	flex-wrap: nowrap;
+	.fa{
+		font-size: 110%;
+		margin: .5em .1em;
+		//margin-top: 4%;
+		display: block;
+	}
+	.rangeWrapper{
+		margin: .3rem;
+	}
 }

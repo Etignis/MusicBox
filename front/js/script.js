@@ -257,6 +257,10 @@ $(document).ready(function(){
 
   Vue.component('playlist-tag', {
     props: {
+			value: {
+				type: Number,
+				default: 50
+			},
       title: {
         type: String,
         default: "заголовок"
@@ -264,10 +268,6 @@ $(document).ready(function(){
       id: {
         type: String
       },
-			volume: {
-				type: Number,
-				default: 50
-			},
 			visible: {
 				type: Boolean,
 				default: true
@@ -292,10 +292,6 @@ $(document).ready(function(){
 				}
       },
 
-      choosen: {
-        type: String,
-        default: "--"
-      },
       checked: {
         type: Array,
 				default: function(){
@@ -314,7 +310,15 @@ $(document).ready(function(){
 				return {
 					active: (this.checked.indexOf(this.id)>-1) //this.id == this.choosen; // (this.checked.indexOf(this.id)>-1)
 				};
-			}
+			},
+			realVolume: {
+					get: function() {
+						return this.value;
+					},
+					set: function(nVal) {
+						this.value = nVal;
+					}
+				}
     },
     methods: {
     	random: function(oEvent) {
@@ -337,30 +341,31 @@ $(document).ready(function(){
     },
     template: `<div v-if='visible' class='PlayListTag' v-bind:class='styleclass'>
           <div class='inner' v-on:click='toggleActive'>
-            <div class='title'>{{title}} ({{choosen}})</div>
+            <div class='title'>{{title}}</div>
 						<div v-if='show_volume === true'>
-							<volume-range v-model.number='this.volume' ></volume-range>
+							<volume-range :value="value" @input="$emit('input', $event)"></volume-range>
+							<audio class='tagAudio'></audio>
 						</div>	
-            <div v-if='show_buttons === "true"' class='buttons'>
-              <button v-show='!isSelected' class='btn' title='Воспроизведение' v-on:click.stop='play'>
+            <div v-if='show_buttons === true' class='buttons'>
+              <button v-show='!isSelected' class='btn' title='Воспроизведение' @click.stop='play'>
                 <i class='fa fa-play' aria-hidden='true'></i>
               </button>
-              <button v-show='isSelected' class='btn' title='Пауза' v-on:click.stop='pause'>
+              <button v-show='isSelected' class='btn' title='Пауза' @click.stop='pause'>
                 <i class='fa fa-pause' aria-hidden='true'></i>
               </button>
-              <button class='btn' title='Перемешать плейлист' v-on:click.stop='random'>
+              <button class='btn' title='Перемешать плейлист' @click.stop='random'>
                 <i class='fa fa-random' aria-hidden='true'></i>
               </button>
-              <button class='btn' title='Закрепить текущую мелодию' v-on:click.stop='fix'>
+              <button class='btn' title='Закрепить текущую мелодию' @click.stop='fix'>
                 <i class='fa fa-thumb-tack' aria-hidden='true'></i>
               </button>
-              <button class='btn' v-bind:class='{ active: show_settings }' title='Выбрать источники' v-on:click.stop='toggleSettings'>
+              <button class='btn' v-bind:class='{ active: show_settings }' title='Настройки' @click.stop='toggleSettings'>
                 <i class='fa fa-cog' aria-hidden='true'></i>
               </button>
             </div>
           </div>
           <div class='settings' v-if='show_settings === true'>
-          	<div class='s-title'>Источники</div>
+          	<div class='s-title'>Настройки</div>
             <slot></slot>
           </div>
         </div>`
@@ -371,10 +376,6 @@ $(document).ready(function(){
       title: {
         type: String,
         default: "заголовок"
-      },
-      choosen: {
-        type: String,
-        default: "-"
       },
       checked: {
         type: Array,
@@ -403,7 +404,7 @@ $(document).ready(function(){
     template: "<div class='PlayListGroup' v-bind:class='[styleclass]' v-show='visible'>\
       <div class='PlayListGroupTitle'>\
         <div class='title'>\
-           {{title}}, ({{choosen}}, {{checked}})\
+           {{title}}, ({{checked}})\
         </div>\
       </div>\
       <div class='flexContent' id='PlayListGroupEmotions'>\

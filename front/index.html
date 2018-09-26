@@ -33,6 +33,7 @@
 	<div>
 		{{musicPlaceFilterValue}}, {{musicToneFilterValue}}
 	</div>
+
   <playlists>
     <playlist-group
       v-for="arrItem in arr"
@@ -42,24 +43,23 @@
       v-bind:styleclass="arrItem.styleclass"
       v-bind:visible="arrItem.visible">
       <playlist-tag
-        v-for="tagItem in arrItem.tags" 
+        v-for="tagItem in arrItem.tags"
 				v-bind:checked="arrItem.selectedTagIds"
         v-bind:key="tagItem.id"
         v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"
         v-bind:show_buttons="tagItem.showButtons"
         v-bind:show_volume="tagItem.showVolume"
-        v-bind:volume="tagItem.volume"
-				v-bind:visible="tagItem.visible">
+        v-model.number="tagItem.volume"
+				v-bind:visible="tagItem.visible"
 				@click.native="onSelectTag(arrItem, tagItem.id)">
-        <playlist-source-option
-          v-for="srcItem in tagItem.src"
-          v-bind:key="srcItem.id"
-          v-bind:title="srcItem.title">
-        </playlist-source-option>
+        
       </playlist-tag>
     </playlist-group>
   </playlists>
+
+	
+
 
 <div style='padding-bottom: 6rem'>
 <pre>{{player}}</pre>

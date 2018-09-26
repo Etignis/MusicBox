@@ -204,12 +204,59 @@ img {
 .btn:hover {
   background: rgba(255, 255, 255, 0.4);
 }
+.tBtn {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  color: #b3b3b3;
+  padding: .6rem .9rem .6rem .9rem ;
+  margin: .1rem;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: color .2s, border .2s, background .2s;
+}
+.tBtn:hover {
+  background: rgba(121, 134, 203, 0.1);
+  border: 1px solid #ccc;
+}
+.tBtn:active {
+  background: rgba(121, 134, 203, 0.3);
+}
+.tBtn.pressed {
+  background: rgba(204, 204, 204, 0.5);
+  color: #7986CB;
+}
+.tBtn.pressed:hover {
+  background: rgba(121, 134, 203, 0.1);
+  border: 1px solid #ccc;
+}
+.tBtn.pressed:active {
+  background: rgba(121, 134, 203, 0.3);
+}
 input:focus,
 .btn:focus {
   box-shadow: 0 0 3px 3px rgba(121, 134, 203, 0.3);
 }
 .fullWidth {
   width: 100%;
+}
+.VolumeWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+.VolumeWrapper .fa {
+  font-size: 110%;
+  margin: .5em .1em;
+  display: block;
+}
+.VolumeWrapper .rangeWrapper {
+  margin: .3rem;
 }
 .PlayLists {
   display: flex;
@@ -279,13 +326,16 @@ input:focus,
   background: rgba(255, 255, 255, 0.5);
   box-shadow: 0 5px 3px 2px rgba(0, 0, 0, 0.02), 0 0px 0px 5px rgba(121, 134, 203, 0.02);
 }
+.PlayListGroup .PlayListTag:active .inner {
+  background: rgba(255, 255, 255, 0.6);
+}
 .PlayListGroup .PlayListTag.active .inner {
   border-color: rgba(121, 134, 203, 0.6);
 }
 .PlayListGroup .PlayListTag .title {
   text-align: center;
   font-size: 130%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   cursor: relative;
 }
 .PlayListGroup .PlayListTag .buttons {
@@ -293,10 +343,10 @@ input:focus,
   flex-direction: row;
   justify-content: space-around;
   flex-wrap: wrap;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  /*	position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;*/
 }
 .PlayListGroup .PlayListTag .btn {
   flex-basis: 20%;
@@ -349,25 +399,6 @@ input:focus,
   align-items: stretch;
   align-items: center;
 }
-.PlayerPanel .VolumeWrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  align-items: stretch;
-}
-.PlayerPanel .VolumeWrapper .fa {
-  font-size: 110%;
-  margin: .3rem;
-  margin-top: 4%;
-  display: block;
-}
-.PlayerPanel .VolumeWrapper .rangeWrapper {
-  margin: .3rem;
-}
-.PlayerPanel .fa {
-  margin-top: 1%;
-}
 .PlayerPanel #PlayerPlayPauseButton,
 .PlayerPanel #PlayerNextTrackButton {
   padding: 1rem;
@@ -394,3 +425,5 @@ input:focus,
   margin: 0.3rem;
   font-size: 230%;
 }
+
+/*# sourceMappingURL=style.css.map */
