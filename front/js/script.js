@@ -272,7 +272,7 @@ $(document).ready(function(){
 			},
       show_buttons: {
       	type: Boolean,
-        default: true
+        default: false
       },
       show_volume: {
       	type: Boolean,
@@ -445,17 +445,23 @@ $(document).ready(function(){
 								{
 									id: "21",
 									title: "Везде",
-									showButtons: false
+									params: {
+										showButtons: false										
+									}
 								},
 								{
 									id: "22",
 									title: "Заброшка",
-									showButtons: false
+									params: {
+										showButtons: false										
+									}
 								},
 								{
 									id: "23",
 									title: "Таверна",
-									showButtons: false
+									params: {
+										showButtons: false										
+									}
 								}
 							]
 						},
@@ -472,17 +478,35 @@ $(document).ready(function(){
 								{
 									id: "11",
 									title: "Фон",
-									showButtons: false
+									params: {
+										showButtons: false										
+									},
+									places: [
+										21,
+										22,
+										23
+									]
 								},
 								{
 									id: "12",
 									title: "Экшн",
-									showButtons: false
+									params: {
+										showButtons: false										
+									},
+									places: [
+										22,
+										23
+									]
 								},
 								{
 									id: "13",
 									title: "Погоня",
-									showButtons: false
+									params: {
+										showButtons: false										
+									},
+									places: [
+										21
+									]
 								}
 							]
 						},
@@ -500,37 +524,43 @@ $(document).ready(function(){
 								{
 									id: "31",
 									title: "Ветер",
-									showButtons: true,
-									showVolume: true,
-									volume: 70,
 									targetFolder: "wind",
 									list: [
 										0
-									]
+									],
+									params: {
+										showButtons: true,
+										showVolume: true,
+										volume: 70			
+									}
 								},
 								{
 									id: "32",
 									title: "Море",
-									showButtons: true,
-									showVolume: true,
-									volume: 10,
 									targetFolder: "sea",
 									list: [
 										0,
 										1
-									]
+									],
+									params: {
+										showButtons: true,
+										showVolume: true,
+										volume: 10			
+									}
 								},
 								{
 									id: "33",
 									title: "Ночь",
-									showButtons: true,
-									showVolume: true,
-									volume: 30,
 									targetFolder: "night",
 									list: [
 										0,
 										1
-									]
+									],
+									params: {
+										showButtons: true,
+										showVolume: true,
+										volume: 30			
+									}
 								},
 								{
 									id: "34",

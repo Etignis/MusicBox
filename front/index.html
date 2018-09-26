@@ -48,10 +48,8 @@
         v-bind:key="tagItem.id"
         v-bind:id="tagItem.id"
         v-bind:title="tagItem.title"
-        v-bind:show_buttons="tagItem.showButtons"
-        v-bind:show_volume="tagItem.showVolume"
+				v-bind="tagItem.params"
         v-model.number="tagItem.volume"
-				v-bind:visible="tagItem.visible"
 				@click.native="onSelectTag(arrItem, tagItem.id)">
         
       </playlist-tag>
