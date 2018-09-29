@@ -33,7 +33,7 @@
 	<div>
 		{{musicPlaceFilterValue}}, {{musicToneFilterValue}}
 	</div>
-
+<!-- ->
   <playlists>
     <playlist-group
       v-for="arrItem in arr"
@@ -54,6 +54,49 @@
         
       </playlist-tag>
     </playlist-group>
+  </playlists>
+<!-- -->
+	
+  <playlists>
+		<!-- place -->
+    <playlist-item
+      :checked="arr.place.selectedTagIds"
+      :title="arr.place.title"
+      :styleclass="arr.place.styleclass"
+			:list="arr.place.tags"
+      :visible="arr.place.visible"
+			@tclick="onSelectTag(arr.place, $event)">      
+    </playlist-item>
+		
+		<!-- tone -->
+    <playlist-item
+      :checked="arr.tone.selectedTagIds"
+      :title="arr.tone.title"
+      :styleclass="arr.tone.styleclass"
+			:list="arr.tone.tags"
+      :visible="arr.tone.visible"
+			@tclick="onSelectTag(arr.tone, $event)">      
+    </playlist-item>
+		
+		<!-- embient -->
+    <playlist-item
+      :checked="arr.embient.selectedTagIds"
+      :title="arr.embient.title"
+      :styleclass="arr.embient.styleclass"
+			:list="arr.embient.tags"
+      :visible="arr.embient.visible"
+			@tclick="onSelectTag(arr.embient, $event)">      
+    </playlist-item>
+		
+		<!-- sounds ->
+    <playlist-item
+      v-bind:key="arr.id"
+      v-bind:checked="arr.selectedTagIds"
+      v-bind:title="arr.title"
+      v-bind:styleclass="arr.styleclass"
+      v-bind:visible="arr.visible">      
+    </playlist-item>
+		<!-- -->
   </playlists>
 
 	

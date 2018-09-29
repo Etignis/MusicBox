@@ -304,6 +304,9 @@ $(document).ready(function(){
 			isSelected: function() {
 				return this.checked.indexOf(this.id)>-1;
 			},
+			buttonsVisibility: function(){
+				return this.show_buttons == true;
+			},
 			styleclass: function() {
 				return {
 					active: (this.checked.indexOf(this.id)>-1) //this.id == this.choosen; // (this.checked.indexOf(this.id)>-1)
@@ -344,7 +347,7 @@ $(document).ready(function(){
 							<volume-range :value="value" @input="$emit('input', $event)"></volume-range>
 							<audio class='tagAudio'></audio>
 						</div>	
-            <div v-if='show_buttons === true' class='buttons'>
+            <div v-if='buttonsVisibility' class='buttons'>
               <button v-show='!isSelected' class='btn' title='Воспроизведение' @click.stop='play'>
                 <i class='fa fa-play' aria-hidden='true'></i>
               </button>
@@ -409,6 +412,62 @@ $(document).ready(function(){
         <slot></slot>\
       </div>\
     </div>"
+  });
+	
+  Vue.component('playlist-item', {
+    props: {
+      title: {
+        type: String,
+        default: "заголовок"
+      },
+      checked: {
+        type: Array,
+				default: function(){
+					return [];
+				}
+      },
+      styleclass: {
+        type: String,
+        default: ""
+      },
+			visible: {
+				type: Boolean,
+				default: true
+			},
+			list: {
+				type: Array,
+				default: function(){
+					return [];
+				}
+			}
+    },	
+    mounted() {
+      //this.$bus.$on('tagSelected', this.selectTag);
+    },
+    destroyed() {
+      //this.$bus.$off('tagSelected')
+    },
+    methods: {
+     
+    },
+    template: `<div class='PlayListGroup' v-bind:class='[styleclass]' v-show='visible'>
+      <div class='PlayListGroupTitle'>
+        <div class='title'>
+           {{title}}, ({{checked}})
+        </div>
+      </div>
+      <div class='flexContent' id='PlayListGroupEmotions'>
+        <playlist-tag
+					v-for="tagItem in list"
+					:key="tagItem.id"
+					:id="tagItem.id"
+					:checked="checked"
+					:title="tagItem.title"
+					v-bind="tagItem.params"
+					@click.native="$emit('tclick', tagItem.id)">
+				</playlist-tag>
+      </div>
+    </div>`
   });
 
   Vue.component('playlists', {
@@ -797,7 +856,9 @@ $(document).ready(function(){
 					tags.selectedTagIds.push(id);
 					this.pauseMusic();
 					this.player.track.entity={};
-					this.playMusic();
+					//this.playMusic();
+					//this.onPlayPauseClick();
+					  this.playAll();
 				} 
 				if (tags.selectType == 'check') {
 					if(tags.selectedTagIds.indexOf(id)>-1) { // exists
@@ -828,6 +889,7 @@ $(document).ready(function(){
 
 				oAudio.addEventListener("timeupdate", function(){					
 					this.player.track.curTime = oAudio.currentTime;
+					this.player.track.maxTime = oAudio.duration;
 				}.bind(this)); 
 
 			},
@@ -862,19 +924,21 @@ $(document).ready(function(){
 			},
 			
 			playAll(){
+				this.player.isPlayed = true;
 				this.playMusic();
 			},
 			pauseAll(){
+				this.player.isPlayed = false;
 				this.pauseMusic();
 			},
 			
 			onPlayPauseClick() {
-				this.player.isPlayed = !this.player.isPlayed;
+				//this.player.isPlayed = !this.player.isPlayed;
 				
 				if(this.player.isPlayed) {
-					this.playAll();
-				} else {
 					this.pauseAll();
+				} else {
+					this.playAll();
 				}
 			},
 			
