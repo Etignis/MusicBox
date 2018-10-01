@@ -58,7 +58,7 @@
 <!-- -->
 	
   <playlists>
-		<!-- place -->
+		<!-- place ->
     <playlist-item
       :checked="arr.place.selectedTagIds"
       :title="arr.place.title"
@@ -67,8 +67,9 @@
       :visible="arr.place.visible"
 			@tclick="onSelectTag(arr.place, $event)">      
     </playlist-item>
+		<!-- -->
 		
-		<!-- tone -->
+		<!-- tone ->
     <playlist-item
       :checked="arr.tone.selectedTagIds"
       :title="arr.tone.title"
@@ -77,6 +78,7 @@
       :visible="arr.tone.visible"
 			@tclick="onSelectTag(arr.tone, $event)">      
     </playlist-item>
+		<!-- -->
 		
 		<!-- embient -->
     <playlist-item

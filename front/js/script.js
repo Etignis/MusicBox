@@ -464,6 +464,7 @@ $(document).ready(function(){
 					:checked="checked"
 					:title="tagItem.title"
 					v-bind="tagItem.params"
+					:show_buttons="tagItem.params.showButtons"
 					@click.native="$emit('tclick', tagItem.id)">
 				</playlist-tag>
       </div>
