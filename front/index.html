@@ -58,7 +58,7 @@
 <!-- -->
 	
   <playlists>
-		<!-- place ->
+		<!-- place -->
     <playlist-item
       :checked="arr.place.selectedTagIds"
       :title="arr.place.title"
@@ -69,7 +69,7 @@
     </playlist-item>
 		<!-- -->
 		
-		<!-- tone ->
+		<!-- tone -->
     <playlist-item
       :checked="arr.tone.selectedTagIds"
       :title="arr.tone.title"
@@ -125,8 +125,17 @@
     </div>
 
     <div class='PlayerRulePanel'>
-			<audio id='PlayerAudio' :src='player.track.entity.src'>
-			</audio>
+			<!--audio id='PlayerAudio' :src='player.track.entity.src'>
+			</audio-->
+			<patifon 
+				ref='mainAudio' 
+				id='mainAudio' 
+				:src="musicSrcFilteredList" 
+				@tracktimeupdated="updateMainAudioTrackTime"
+				@onplay="mainAudioIsStarted"
+				@onpause="mainAudioIsPaused"
+				>
+			</patifon>
       <!-- Sound Volume -->
       <!-- 
 			<div class='VolumeWrapper'>

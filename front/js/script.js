@@ -10,6 +10,10 @@ String.prototype.toHHMMSS = function () {
     return hours+':'+minutes+':'+seconds;
 }
 
+function randd(min, max) {
+  return Math.floor(arguments.length > 1 ? (max - min + 1) * Math.random() + min : (min + 1) * Math.random());
+};
+
 $(document).ready(function(){
 
   Vue.component('range', {
@@ -243,6 +247,133 @@ $(document).ready(function(){
 	
 	
 
+  Vue.component('patifon', {
+    props: {
+      src: {
+        type: Array,
+        default: function(){
+					return [];
+				}
+      },
+			fadeTransition: {
+				type: Boolean,
+				default: true
+			},
+			fadeTransitionDuration: {
+				type: Number,
+				default: 2
+			},
+			id: {
+				type: String,
+				default: "patifon_"+randd(1,99)
+			}
+    },
+		data: function() {
+			return {
+				activeAudio: "winter",
+				activeWinterTitle: "",
+				activeSummerTitle: "",
+				activeSrcIndex: 0
+			}
+		},
+		mounted() {
+      //this.$bus.$on('tagSelected', this.selectTag);
+			let oWinterAudio = document.getElementById(this.winterAudioId);
+			let oSummerAudio = document.getElementById(this.summerAudioId);
+			
+			oWinterAudio.addEventListener("timeupdate", function(){					
+				this.updateTrackTime();
+			}.bind(this)); 
+			oSummerAudio.addEventListener("timeupdate", function(){					
+				this.updateTrackTime();
+			}.bind(this)); 
+    },
+		computed: {
+			srcListLength: function(){					
+				return this.src.length;
+			},
+			activeTitle: function(){
+				return (this.activeAudio=='winer')? this.activeWinterTitle: this.activeSummerTitle;
+			},
+			winterSrc: function(){
+				if(this.srcListLength<1) {
+					return "";
+				}
+				let nRequestedIndex = this.activeSrcIndex*2;
+				nRequestedIndex = (nRequestedIndex<this.srcListLength)? nRequestedIndex : 0;
+				this.activeWinterTitle=this.src[nRequestedIndex].title;
+				return this.src[nRequestedIndex].src;
+			},
+			summerSrc: function(){
+				switch(this.srcListLength){
+					case 0: return ""; break;
+					case 1: return this.src[0].src;
+				}
+				let nRequestedIndex = 1+Number(this.activeSrcIndex*2);
+				nRequestedIndex = (nRequestedIndex<this.srcListLength)? nRequestedIndex : 1;
+				this.activeSummerTitle=this.src[nRequestedIndex].title;
+				return this.src[nRequestedIndex].src;
+			},
+			winterAudioId: function(){
+				return this.id+"_winter";
+			},
+			summerAudioId: function(){
+				return this.id+"_summer";
+			},
+			activeAudioId: function(){
+				if(this.activeAudio=='winer') {
+					//this.activeTitle = "";
+					return this.winterAudioId;
+				} else {
+					//this.activeTitle = "";
+					return this.summerAudioId;
+				}
+				return (this.activeAudio=='winer')? this.winterAudioId: this.summerAudioId;
+			}
+		},
+		methods: {
+			getId: function(){
+				return this.id;
+			},
+			switchActiveAudio: function(){
+				this.activeAudio = (this.activeAudio=='winer')? "summer" : "winer";
+			},
+			play: function(){
+				var oAudio = document.getElementById(this.activeAudioId);
+				if(!oAudio.paused()) {
+					$("#"+this.activeAudioId).animate({volume: 0}, 1000);
+					this.switchActiveAudio;
+					oAudio = document.getElementById(this.activeAudioId);
+				}
+				oAudio.load();
+				if(oAudio.readyState == 4) {
+					oAudio.play();
+					this.$emit('onplay', {title: this.activeTitle});
+				} else {
+					oAudio.addEventListener("canplay", function(){
+						oAudio.play();		
+						this.$emit('onplay', {title: this.activeTitle});						
+					}.bind(this));
+				}
+				//this.$emit('tracktname', this.activeTitle);
+				// $("#"+a_id).animate({volume: nVolume}, 1000);	
+			},
+			pause: function(){
+				var oAudio = document.getElementById(this.activeAudioId);
+				oAudio.pause();
+				this.$emit('onpause');			
+			},
+			updateTrackTime: function(){
+				var oAudio = document.getElementById(this.activeAudioId);
+				this.$emit('tracktimeupdated', oAudio.currentTime, oAudio.duration);
+			}
+		},
+    template: `<div v-bind:id="id">
+			<audio class='winter' :src="winterSrc" :id="winterAudioId"></audio>
+			<audio class='summer' :src="summerSrc" :id="summerAudioId"></audio>
+		</div>`
+  });
+	
   Vue.component('playlist-source-option', {
     props: {
       title: {
@@ -463,7 +594,6 @@ $(document).ready(function(){
 					:id="tagItem.id"
 					:checked="checked"
 					:title="tagItem.title"
-					:show_buttons="tagItem.params"
 					@click.native="$emit('tclick', tagItem.id)">
 				</playlist-tag>
       </div>
@@ -811,9 +941,21 @@ $(document).ready(function(){
 				}
 			}
     },
+
 		computed: {
 			arr: function(){
 				return this.main.array[this.main.selectedIndex];
+			},
+			musicSrcFilteredList: function(){
+				let aSuitableTracks = this.musicData.music.list.filter(function(oTrack){
+					if (
+						oTrack.tags.indexOf(this.musicPlaceFilterValue)>-1 &&
+						oTrack.tags.indexOf(this.musicToneFilterValue)>-1
+						) {
+							return true;
+						}
+				}.bind(this));
+				return aSuitableTracks;
 			},
 			musicPlaceFilterValue: function(){
 				return this.arr.place.tags.filter(function(oItem){
@@ -851,14 +993,13 @@ $(document).ready(function(){
 		},
 		methods: {
 			onSelectTag(tags, id) {
+				/**/
 				if (tags.selectType == 'radio') {
 					tags.selectedTagIds.pop();
 					tags.selectedTagIds.push(id);
-					this.pauseMusic();
-					this.player.track.entity={};
-					//this.playMusic();
-					//this.onPlayPauseClick();
-					  this.playAll();
+					//this.pauseMusic();
+					//this.player.track.entity={};
+					  //this.playAll();
 				} 
 				if (tags.selectType == 'check') {
 					if(tags.selectedTagIds.indexOf(id)>-1) { // exists
@@ -871,9 +1012,12 @@ $(document).ready(function(){
 						tags.selectedTagIds.push(id);
 					}
 				}
+				 this.playAll();
+				/**/
 			},
 			
 			startMainAudio(){
+				/*/
 				let oAudio = document.getElementById("PlayerAudio");
 				if(oAudio.readyState == 4) {
 					oAudio.play();
@@ -891,13 +1035,16 @@ $(document).ready(function(){
 					this.player.track.curTime = oAudio.currentTime;
 					this.player.track.maxTime = oAudio.duration;
 				}.bind(this)); 
-
+				/**/
+				
+				// test
+				this.$refs.mainAudio.pause();
+				this.$refs.mainAudio.play();
 			},
 			
 			pauseMainAudio(){
 				let oAudio = document.getElementById("PlayerAudio");
 				oAudio.pause();
-				//this.player.track.maxTime = oAudio.duration;
 			},
 			
 			findMusicTrack(){
@@ -936,19 +1083,33 @@ $(document).ready(function(){
 				//this.player.isPlayed = !this.player.isPlayed;
 				
 				if(this.player.isPlayed) {
-					this.pauseAll();
+					//this.pauseAll();
+					this.$refs.mainAudio.pause();
 				} else {
-					this.playAll();
+					//this.playAll();
+					this.$refs.mainAudio.play();
 				}
 			},
 			
 			changePlayerVolume: function() {
-				let oAudio = document.getElementById("PlayerAudio");
-				oAudio.volume = this.musicTrackVolume;
+				//let oAudio = document.getElementById("PlayerAudio");
+				//oAudio.volume = this.musicTrackVolume;
 			},
 			
 			onFadeClick() {
 				this.player.isFade = !this.player.isFade;
+			},
+			
+			updateMainAudioTrackTime: function(currentTime, duration){
+				this.player.track.curTime = currentTime;
+				this.player.track.maxTime = duration;
+			},
+			mainAudioIsStarted: function(oParams){
+				this.player.track.entity.title = oParams.title;
+				this.player.isPlayed = true;
+			},
+			mainAudioIsPaused: function(){
+				this.player.isPlayed = false;
 			}
 		}
   });
